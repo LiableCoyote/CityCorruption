@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>City Corruption Tracker</title>
 <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700&family=Cinzel:wght@400;600;700&family=IM+Fell+English:ital@0;1&display=swap" rel="stylesheet">
 <style>
@@ -210,7 +210,7 @@ body{background:#0a0602;font-family:'IM Fell English',serif;overflow:hidden;heig
 /* CORRUPTION MODAL */
 #mod-ov{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.72);z-index:100;align-items:center;justify-content:center;backdrop-filter:blur(2px);}
 #mod-ov.open{display:flex;}
-#modal{background:#120900;border:1px solid var(--dk-gold);width:360px;max-width:95vw;padding:22px 22px 18px;position:relative;box-shadow:0 0 60px rgba(0,0,0,.9),0 0 20px rgba(180,80,0,.14);}
+#modal{background:#120900;border:1px solid var(--dk-gold);width:360px;max-width:95vw;max-height:90vh;overflow-y:auto;padding:22px 22px 18px;position:relative;box-shadow:0 0 60px rgba(0,0,0,.9),0 0 20px rgba(180,80,0,.14);}
 #modal::before{content:'';position:absolute;inset:6px;border:1px solid rgba(160,100,0,.13);pointer-events:none;}
 #mtitle{font-family:'Cinzel Decorative',serif;font-size:13px;color:var(--gold);text-align:center;margin-bottom:3px;}
 #mhouse{text-align:center;font-size:10px;font-style:italic;margin-bottom:3px;padding:2px 8px;display:none;}
@@ -278,7 +278,9 @@ body{background:#0a0602;font-family:'IM Fell English',serif;overflow:hidden;heig
     border-radius:2px;margin:8px auto 2px;cursor:grab;flex-shrink:0;
   }
   #mobile-bar{
-    position:fixed;bottom:0;left:0;right:0;height:52px;
+    position:fixed;bottom:0;left:0;right:0;
+    height:calc(52px + env(safe-area-inset-bottom));
+    padding-bottom:env(safe-area-inset-bottom);
     background:rgba(10,5,0,0.97);border-top:1px solid var(--dk-gold);
     display:flex;align-items:stretch;z-index:60;
   }
@@ -291,12 +293,12 @@ body{background:#0a0602;font-family:'IM Fell English',serif;overflow:hidden;heig
   }
   .mob-btn:last-child{border-right:none;}
   .mob-btn.active{color:var(--gold);background:rgba(180,100,0,0.15);}
-  #map-reset{bottom:64px;}
-  #toast{bottom:64px;}
+  #map-reset{bottom:calc(64px + env(safe-area-inset-bottom));}
+  #toast{bottom:calc(64px + env(safe-area-inset-bottom));}
   #modal{width:95vw;}
-  .stab{min-height:40px;font-size:9px;padding:8px 4px;}
-  #undo-btn,#new-sess-btn{min-height:40px;padding:8px 6px;}
-  .dmb,.eab,.fab{min-height:40px;padding:9px 4px;}
+  .stab{min-height:44px;font-size:9px;padding:8px 4px;}
+  #undo-btn,#new-sess-btn{min-height:44px;padding:8px 6px;}
+  .dmb,.eab,.fab{min-height:44px;padding:9px 4px;}
   .rel-adj{width:32px;height:32px;font-size:15px;}
   .mact{min-height:44px;font-size:11px;}
   .d-name{font-size:12px;}
@@ -307,9 +309,47 @@ body{background:#0a0602;font-family:'IM Fell English',serif;overflow:hidden;heig
   .log-sub{font-size:10px;}
   .house-item{padding:10px 12px;}
   #mnotes-ta{font-size:12px;}
+  .ebtn{min-height:44px;font-size:10px;padding:8px 14px;}
+  #exp-code{font-size:11px;}
+}
+/* Landscape phones — reduce drawer so map stays visible */
+@media (max-width:900px) and (orientation:landscape){
+  #side-panel{height:52vh;}
+  #mobile-bar{height:calc(44px + env(safe-area-inset-bottom));padding-bottom:env(safe-area-inset-bottom);}
+  #map-reset{bottom:calc(56px + env(safe-area-inset-bottom));}
+  #toast{bottom:calc(56px + env(safe-area-inset-bottom));}
 }
 #mobile-bar{display:none;}
 #drawer-handle{display:none;}
+
+/* Touch :active feedback (mirrors :hover for tap responsiveness) */
+#map-reset:active{background:rgba(180,100,0,.18);border-color:var(--gold);}
+.mode-btn:active:not(.active){color:rgba(200,168,76,0.65);background:rgba(100,60,0,0.1);}
+.stab:active:not(.active){color:rgba(200,168,76,0.55);}
+.district-item:active{background:rgba(180,100,0,0.07);}
+.house-item:active{background:rgba(180,100,0,0.05);}
+#undo-btn:active:not([disabled]){border-color:var(--gold);color:var(--gold);background:rgba(80,40,0,0.28);}
+#new-sess-btn:active{border-color:var(--gold);color:var(--gold);background:rgba(80,50,0,0.28);}
+.rel-adj:active{border-color:var(--gold);background:rgba(80,50,0,0.4);}
+.rel-seg:active{filter:brightness(1.35);transform:scaleY(1.2);}
+.cb:active{border-color:var(--gold);}
+.mact:active{opacity:.8;}
+.mob-btn:active:not(.active){color:var(--gold);background:rgba(180,100,0,0.2);}
+.dtag:active{background:rgba(100,0,0,0.18);border-color:var(--crimson);color:#cc8888;}
+.utag:active{background:rgba(100,70,0,0.18);border-color:var(--dk-gold);color:var(--parch);}
+#btn-exp:active{border-color:var(--gold);color:var(--gold);}
+#btn-rg:active{border-color:var(--crimson);color:#cc4444;}
+#btn-ad:active{border-color:#44cc44;color:#88ee88;}
+#btn-dd:active{border-color:var(--crimson);color:#cc4444;}
+.fcard-hdr:active{background:rgba(180,100,0,0.06);}
+#btn-ah:active{border-color:#88cc44;color:#88cc44;}
+#btn-dh:active{border-color:var(--crimson);color:#cc4444;}
+#btn-rf:active{border-color:var(--dk-gold);color:var(--gold);}
+#btn-cpe:active{background:rgba(200,160,60,.1);}
+#btn-cle:active{border-color:var(--dk-gold);color:var(--gold);}
+#rc-btn:active{border-color:var(--crimson);color:#cc4444;background:rgba(60,0,0,0.14);}
+#rr-btn:active{border-color:var(--dk-gold);color:var(--gold);background:rgba(60,40,0,0.14);}
+#sd-btn:active{border-color:#44cc44;color:#88ee88;background:rgba(0,40,0,0.14);}
 </style>
 </head>
 <body>
@@ -1192,7 +1232,7 @@ function initMobile(){
   handle.addEventListener('touchstart',e=>{swipeStartY=e.touches[0].clientY;},{passive:true});
   handle.addEventListener('touchmove',e=>{
     if(swipeStartY===null)return;
-    if(e.touches[0].clientY-swipeStartY>60)closeMobilePanel();
+    if(e.touches[0].clientY-swipeStartY>60){closeMobilePanel();swipeStartY=null;}
   },{passive:true});
   handle.addEventListener('touchend',()=>{swipeStartY=null;},{passive:true});
 }
