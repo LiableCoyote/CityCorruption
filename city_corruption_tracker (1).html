@@ -86,6 +86,18 @@ body{background:#0a0602;font-family:'IM Fell English',serif;overflow:hidden;heig
 .log-entry.log-up .log-main{color:#cc7777;}
 .log-entry.log-down .log-main{color:#88cc88;}
 .log-empty{padding:18px 10px;text-align:center;font-style:italic;color:rgba(200,168,76,0.28);font-size:10px;}
+.log-session{padding:4px 10px;text-align:center;font-family:'Cinzel',serif;font-size:8px;color:var(--gold);letter-spacing:2px;border-top:1px solid rgba(138,111,48,0.25);border-bottom:1px solid rgba(138,111,48,0.25);background:rgba(138,111,48,0.06);margin:3px 0;}
+.log-threshold{padding:5px 10px;font-size:9.5px;border-left:3px solid;}
+.log-threshold.thr-down{background:rgba(80,0,0,0.18);border-color:var(--crimson);color:#cc5555;}
+.log-threshold.thr-up{background:rgba(80,60,0,0.18);border-color:var(--gold);color:var(--gold);}
+.h-status{font-size:8.5px;font-style:italic;margin-left:4px;}
+.d-note-ind{font-size:9px;color:rgba(200,168,76,0.45);flex-shrink:0;margin-left:2px;}
+#mnotes-row{margin-top:8px;padding-top:8px;border-top:1px solid rgba(138,111,48,0.25);}
+#mnotes-lbl{display:block;font-family:'Cinzel',serif;font-size:8px;color:rgba(200,168,76,0.5);letter-spacing:1px;text-transform:uppercase;margin-bottom:4px;}
+#mnotes-ta{width:100%;background:rgba(20,10,0,0.6);border:1px solid rgba(138,111,48,0.35);color:var(--parch);font-family:'IM Fell English',serif;font-size:10px;padding:5px;resize:vertical;min-height:60px;box-sizing:border-box;}
+#mnotes-ta:focus{outline:none;border-color:var(--gold);}
+#new-sess-btn{padding:6px 8px;background:rgba(30,20,0,0.8);border:1px solid rgba(138,111,48,0.35);color:rgba(200,168,76,0.5);font-family:'Cinzel',serif;font-size:7.5px;letter-spacing:.7px;text-transform:uppercase;cursor:pointer;transition:all .2s;flex-shrink:0;}
+#new-sess-btn:hover{border-color:var(--gold);color:var(--gold);background:rgba(80,50,0,0.28);}
 
 /* DM bottom */
 #dm-bottom{flex-shrink:0;border-top:1px solid var(--dk-gold);}
@@ -273,6 +285,7 @@ body{background:#0a0602;font-family:'IM Fell English',serif;overflow:hidden;heig
         <div id="undo-bar">
           <button id="undo-btn" disabled onclick="undoLast()">↩ Undo Last</button>
           <span id="undo-cnt"></span>
+          <button id="new-sess-btn" onclick="newSession()">⚑ New Session</button>
         </div>
         <div id="change-log"></div>
       </div>
@@ -341,6 +354,10 @@ body{background:#0a0602;font-family:'IM Fell English',serif;overflow:hidden;heig
     </div>
     <div id="cdesc">Untouched by shadow</div>
     <div id="mrelprev"></div>
+    <div id="mnotes-row">
+      <label id="mnotes-lbl" for="mnotes-ta">DM Notes</label>
+      <textarea id="mnotes-ta" rows="3" placeholder="Notes about this district…"></textarea>
+    </div>
     <div id="macts">
       <button class="mact" id="mc" onclick="closeModal()">Cancel</button>
       <button class="mact" id="mok" onclick="confirmLv()">Apply</button>
@@ -368,7 +385,7 @@ const DESCS=['Untouched by shadow','Whispers in dark corners','Corruption spread
 const COLORS=['#6baed6','#74c476','#fd8d3c','#9e9ac8','#fc8d59','#78c679','#e6550d','#3182bd'];
 const MAX_HIST=30;
 const CK='cct-corrupt-v1',GK='cct-geo-v1',HK='cct-houses-v1',RK='cct-rel-v1',LK='cct-log-v1';
-const EQK='cct-eq-v1',SDK='cct-savedef-v1';
+const EQK='cct-eq-v1',SDK='cct-savedef-v1',NK='cct-notes-v1',SK='cct-session-v1';
 const EQ_DEFAULT='oldR - delta';
 const BAKED=null;/*__BM__*/
 
@@ -403,7 +420,7 @@ const DH=[
 ];
 
 // ━━━━ STATE ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-let CS={},REL={},GEO=[],HS=[],LOG=[],EQ=EQ_DEFAULT;
+let CS={},REL={},GEO=[],HS=[],LOG=[],EQ=EQ_DEFAULT,NOTES={},SESS=0;
 let mode='dm',dmTab='districts',selEdit=null,selHouse=null,activeId=null,pendLv=null;
 let dragV=null,dragging=false;
 
@@ -417,6 +434,8 @@ function load(){
     if(BAKED.cs)defCS=BAKED.cs;
     if(BAKED.rel)defREL=BAKED.rel;
     if(BAKED.eq)defEQ=BAKED.eq;
+    if(BAKED.notes)NOTES=BAKED.notes;
+    if(BAKED.sess)SESS=BAKED.sess;
   } else {
     // Fall back to localStorage user-saved defaults
     try{const s=localStorage.getItem(SDK);if(s){const ud=JSON.parse(s);if(ud.geo)defGEO=ud.geo;if(ud.hs)defHS=ud.hs;if(ud.cs)defCS=ud.cs;if(ud.rel)defREL=ud.rel;}}catch(e){}
@@ -430,6 +449,8 @@ function load(){
   try{const s=localStorage.getItem(RK);if(s)REL=JSON.parse(s);}catch(e){}
   try{const s=localStorage.getItem(LK);if(s)LOG=JSON.parse(s);}catch(e){}
   try{const s=localStorage.getItem(EQK);if(s)EQ=s;}catch(e){}
+  try{const s=localStorage.getItem(NK);if(s)NOTES=JSON.parse(s);}catch(e){}
+  try{const s=localStorage.getItem(SK);if(s)SESS=parseInt(s)||0;}catch(e){}
   if(!GEO.length) GEO=JSON.parse(JSON.stringify(defGEO));
   if(!HS.length)  HS=JSON.parse(JSON.stringify(defHS));
   defGEO.forEach(d=>{if(CS[d.id]===undefined)CS[d.id]=0;});
@@ -440,11 +461,14 @@ const saveG=()=>localStorage.setItem(GK,JSON.stringify(GEO));
 const saveH=()=>localStorage.setItem(HK,JSON.stringify(HS));
 const saveR=()=>localStorage.setItem(RK,JSON.stringify(REL));
 const saveL=()=>localStorage.setItem(LK,JSON.stringify(LOG));
+const saveN=()=>localStorage.setItem(NK,JSON.stringify(NOTES));
+const saveS=()=>localStorage.setItem(SK,String(SESS));
 
 // ━━━━ UTILS ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 const pts2s=p=>p.map(v=>v[0]+','+v[1]).join(' ');
 function centroid(pts){let cx=0,cy=0;pts.forEach(([x,y])=>{cx+=x;cy+=y;});return[cx/pts.length,cy/pts.length];}
 function getHouse(distId){return HS.find(h=>h.districts.includes(distId))||null;}
+function getHouseStatus(rel){if(rel>=8)return{label:'Loyal',color:'#88cc66'};if(rel>=6)return{label:'Cooperative',color:'#88cc66'};if(rel>=4)return{label:'Neutral',color:'#c9a84c'};if(rel>=2)return{label:'Wary',color:'#cc7744'};return{label:'Hostile',color:'#cc5555'};}
 function clientToSVG(cx,cy){const sv=document.getElementById('map-svg'),pt=sv.createSVGPoint();pt.x=cx;pt.y=cy;const r=pt.matrixTransform(sv.getScreenCTM().inverse());return[r.x,r.y];}
 function hex2rgba(h,a){const r=parseInt(h.slice(1,3),16),g=parseInt(h.slice(3,5),16),b=parseInt(h.slice(5,7),16);return`rgba(${r},${g},${b},${a})`;}
 function fmtTime(ts){const d=Math.floor((Date.now()-ts)/1000);if(d<60)return'just now';if(d<3600)return Math.floor(d/60)+'m ago';if(d<86400)return Math.floor(d/3600)+'h ago';return new Date(ts).toLocaleDateString();}
@@ -607,7 +631,9 @@ function renderDistTab(){
     const nm=document.createElement('span');nm.className='d-name';nm.textContent=d.name;
     const pp=document.createElement('div');pp.className='d-pips';
     for(let i=1;i<=5;i++){const p=document.createElement('div');p.className='pip'+(i<=lv?(lv===5?' on max':' on'):'');pp.appendChild(p);}
-    row.appendChild(dot);row.appendChild(nm);row.appendChild(pp);
+    row.appendChild(dot);row.appendChild(nm);
+    if(NOTES[d.id]){const ni=document.createElement('span');ni.className='d-note-ind';ni.title='Has DM notes';ni.textContent='✎';row.appendChild(ni);}
+    row.appendChild(pp);
     el.appendChild(row);
   });
 }
@@ -631,10 +657,12 @@ function renderHousesTab(){
       const v=parseInt(prompt('Set relations for '+h.name+' (0–10):',REL[h.id]||0));
       if(!isNaN(v))setRel(h.id,Math.max(0,Math.min(10,v)));
     };
+    const st=getHouseStatus(rel);
+    const sl=document.createElement('span');sl.className='h-status';sl.textContent=st.label;sl.style.color=st.color;
     const bplus=document.createElement('button');bplus.className='rel-adj';bplus.textContent='+';
     bplus.title='Increase relations';
     bplus.onclick=()=>setRel(h.id,Math.min(10,(REL[h.id]||0)+1));
-    ctrl.appendChild(bminus);ctrl.appendChild(rn);ctrl.appendChild(bplus);
+    ctrl.appendChild(bminus);ctrl.appendChild(rn);ctrl.appendChild(sl);ctrl.appendChild(bplus);
     hdr.appendChild(dot);hdr.appendChild(nm);hdr.appendChild(ctrl);
     const bar=document.createElement('div');bar.className='h-bar';
     for(let i=0;i<10;i++){
@@ -656,10 +684,21 @@ function setRel(hid,val){REL[hid]=val;saveR();renderHousesTab();renderSVG();toas
 function renderLogTab(){
   const log=document.getElementById('change-log');log.innerHTML='';
   const ub=document.getElementById('undo-btn'),uc=document.getElementById('undo-cnt');
-  ub.disabled=!LOG.length;
-  uc.textContent=LOG.length?LOG.length+' change'+(LOG.length>1?'s':''):'';
+  const realEntries=LOG.filter(e=>!e.type);
+  ub.disabled=!realEntries.length;
+  uc.textContent=realEntries.length?realEntries.length+' change'+(realEntries.length>1?'s':''):'';
   if(!LOG.length){const e=document.createElement('div');e.className='log-empty';e.textContent='No changes recorded yet.';log.appendChild(e);return;}
   [...LOG].reverse().forEach(e=>{
+    if(e.type==='session'){
+      const row=document.createElement('div');row.className='log-session';
+      row.textContent='── Session '+e.num+' ──';
+      log.appendChild(row);return;
+    }
+    if(e.type==='threshold'){
+      const row=document.createElement('div');row.className='log-threshold '+(e.direction==='down'?'thr-down':'thr-up');
+      row.textContent=(e.direction==='down'?'⚠ ':'✦ ')+e.hn+' became '+e.status;
+      log.appendChild(row);return;
+    }
     const row=document.createElement('div');row.className='log-entry '+(e.newC>e.oldC?'log-up':'log-down');
     const t=document.createElement('div');t.className='log-time';t.textContent=fmtTime(e.ts);
     const m=document.createElement('div');m.className='log-main';
@@ -679,6 +718,7 @@ function openModal(id){
   if(h){mh.style.display='block';mh.style.color=h.color;mh.textContent=h.name+' — Relations: '+(REL[h.id]||0)+'/10';}
   else mh.style.display='none';
   updateCBtns(pendLv);
+  document.getElementById('mnotes-ta').value=NOTES[id]||'';
   document.getElementById('mod-ov').classList.add('open');
 }
 function closeModal(){document.getElementById('mod-ov').classList.remove('open');activeId=null;pendLv=null;}
@@ -704,6 +744,10 @@ function updateCBtns(lv){
 }
 function confirmLv(){
   if(activeId===null||pendLv===null)return;
+  // Save notes regardless of whether corruption changed
+  const noteVal=document.getElementById('mnotes-ta').value.trim();
+  if(noteVal)NOTES[activeId]=noteVal;else delete NOTES[activeId];
+  saveN();renderDistTab();
   const oldC=CS[activeId]||0;
   if(pendLv===oldC){closeModal();return;}
   const h=getHouse(activeId),oldR=h?(REL[h.id]||0):null,delta=pendLv-oldC;
@@ -712,7 +756,16 @@ function confirmLv(){
   if(h){newR=evalEq(oldR,delta,pendLv,oldC);REL[h.id]=newR;saveR();}
   const d=GEO.find(x=>x.id===activeId);
   const entry={ts:Date.now(),distId:activeId,dn:d.name,oldC,newC:pendLv,hid:h?h.id:null,hn:h?h.name:null,oldR,newR};
-  LOG.push(entry);if(LOG.length>MAX_HIST)LOG.shift();saveL();
+  LOG.push(entry);
+  if(h&&oldR!==null&&newR!==null){
+    const THRESHOLDS=[{v:7,up:'Loyal',down:null},{v:5,up:'Cooperative',down:null},{v:3,up:null,down:'Wary'},{v:1,up:null,down:'Hostile'}];
+    THRESHOLDS.forEach(t=>{
+      const crossedDown=oldR>t.v&&newR<=t.v,crossedUp=oldR<=t.v&&newR>t.v;
+      if(crossedDown&&t.down)LOG.push({type:'threshold',ts:Date.now(),hid:h.id,hn:h.name,status:t.down,direction:'down'});
+      if(crossedUp&&t.up)LOG.push({type:'threshold',ts:Date.now(),hid:h.id,hn:h.name,status:t.up,direction:'up'});
+    });
+  }
+  while(LOG.length>MAX_HIST)LOG.shift();saveL();
   renderSVG();renderDMPanel();
   toast((pendLv>oldC?'▲ ':'▼ ')+d.name+': Tier '+oldC+'→'+pendLv+(h?' | '+h.name+': '+oldR+'→'+newR:''));
   closeModal();
@@ -720,8 +773,12 @@ function confirmLv(){
 
 // ━━━━ UNDO ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 function undoLast(){
-  if(!LOG.length)return;
-  const e=LOG.pop();
+  // Find last real corruption entry (not session/threshold markers)
+  const idx=LOG.map((e,i)=>({e,i})).filter(({e})=>!e.type).map(({i})=>i).pop();
+  if(idx===undefined)return;
+  const e=LOG[idx];
+  // Remove this entry and any trailing markers after it
+  LOG.splice(idx);
   CS[e.distId]=e.oldC;
   if(e.hid)REL[e.hid]=e.oldR;
   saveC();saveR();saveL();
@@ -729,10 +786,18 @@ function undoLast(){
   toast('↩ Undone: '+e.dn+' Tier '+e.newC+'→'+e.oldC);
 }
 
+function newSession(){
+  SESS++;saveS();
+  LOG.push({type:'session',ts:Date.now(),num:SESS});
+  while(LOG.length>MAX_HIST)LOG.shift();saveL();
+  renderLogTab();
+  toast('Session '+SESS+' started');
+}
+
 // ━━━━ SAVE DEFAULT / FORMULA ━━━━━━━━━━━━━━━━━━━━━━━━━━━
 function saveAsDefault(){
   if(!confirm('Bake current state into a new HTML file?\n\nAnyone who opens the downloaded file will start with your current districts, factions, corruption levels, relations, and formula — no setup needed.'))return;
-  const state={geo:GEO,hs:HS,cs:CS,rel:REL,eq:EQ};
+  const state={geo:GEO,hs:HS,cs:CS,rel:REL,eq:EQ,notes:NOTES,sess:SESS};
   const marker=/const BAKED=.*?;\/\*__BM__\*\//;
   const replacement='const BAKED='+JSON.stringify(state)+';/*__BM__*/';
   const html=document.documentElement.outerHTML.replace(marker,replacement);
