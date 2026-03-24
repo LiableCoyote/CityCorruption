@@ -74,6 +74,13 @@ body{background:#0a0602;font-family:'IM Fell English',serif;overflow:hidden;heig
 #undo-bar{padding:7px 10px;border-bottom:1px solid rgba(100,70,0,0.18);flex-shrink:0;display:flex;align-items:center;gap:8px;}
 #undo-btn{flex:1;padding:6px;background:rgba(30,10,0,0.8);border:1px solid rgba(150,80,0,0.45);color:rgba(200,150,80,0.65);font-family:'Cinzel',serif;font-size:8px;letter-spacing:1px;text-transform:uppercase;cursor:pointer;transition:all .2s;}
 #undo-btn:hover:not([disabled]){border-color:var(--gold);color:var(--gold);background:rgba(80,40,0,0.28);}
+#sess-sum-btn{background:transparent;border:1px solid rgba(138,111,48,0.28);color:rgba(200,168,76,0.45);font-family:'Cinzel',serif;font-size:8px;letter-spacing:.5px;text-transform:uppercase;cursor:pointer;padding:3px 6px;transition:all .2s;}
+#sess-sum-btn:hover{border-color:var(--gold);color:var(--gold);}
+#sess-sum-btn:active{border-color:var(--gold);color:var(--gold);}
+#redo-btn{background:transparent;border:1px solid rgba(138,111,48,0.28);color:rgba(200,168,76,0.45);font-family:'Cinzel',serif;font-size:8px;letter-spacing:.5px;text-transform:uppercase;cursor:pointer;padding:3px 6px;transition:all .2s;}
+#redo-btn:hover:not([disabled]){border-color:var(--gold);color:var(--gold);background:rgba(80,40,0,0.28);}
+#redo-btn[disabled]{opacity:0.3;cursor:default;}
+#redo-btn:active:not([disabled]){border-color:var(--gold);color:var(--gold);background:rgba(80,40,0,0.28);}
 #undo-btn[disabled]{opacity:.3;cursor:default;}
 #undo-cnt{font-size:9px;color:rgba(200,168,76,0.35);font-style:italic;flex-shrink:0;}
 #change-log{flex:1;overflow-y:auto;min-height:0;}
@@ -207,6 +214,99 @@ body{background:#0a0602;font-family:'IM Fell English',serif;overflow:hidden;heig
 .fzone{stroke-width:2;cursor:pointer;transition:fill .2s,stroke-opacity .2s;stroke-opacity:.6;}
 .fzone:hover{stroke-opacity:1;filter:brightness(1.15);}
 
+
+
+/* INTER-HOUSE RELATIONS */
+#hrel-section{padding:8px 10px;border-top:1px solid rgba(138,111,48,0.18);}
+#hrel-hdr{font-family:'Cinzel',serif;font-size:9px;color:rgba(200,168,76,0.45);letter-spacing:.5px;text-transform:uppercase;margin-bottom:6px;}
+#hrel-grid{display:flex;flex-direction:column;gap:4px;}
+.hrel-row{display:flex;align-items:center;gap:6px;padding:3px 6px;border-radius:2px;cursor:pointer;transition:background .15s;}
+.hrel-row:hover{background:rgba(180,100,0,0.07);}
+.hrel-row:active{background:rgba(180,100,0,0.07);}
+.hrel-dots{display:flex;gap:3px;}
+.hrel-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
+.hrel-names{font-size:9px;color:var(--parch);flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.hrel-stance{font-family:'Cinzel',serif;font-size:8px;letter-spacing:.5px;text-transform:uppercase;padding:2px 6px;border:1px solid;border-radius:2px;flex-shrink:0;min-width:52px;text-align:center;}
+.hrel-stance.allied{color:#88cc66;border-color:rgba(100,180,60,0.35);}
+.hrel-stance.rival{color:#cc5555;border-color:rgba(180,60,60,0.35);}
+.hrel-stance.neutral{color:rgba(200,168,76,0.45);border-color:rgba(138,111,48,0.25);}
+
+
+
+
+
+
+/* THEME VARIANTS */
+body.theme-parchment{--gold:#5c4a1e;--dk-gold:#3d2e0e;--parch:#3b2f1a;--pbg:rgba(235,220,185,0.97);background:#e8dcc0;}
+body.theme-parchment #map-wrapper{background:#d4c4a0;}
+body.theme-parchment .district-zone{stroke:rgba(60,40,10,0.45);}
+body.theme-parchment .dlabel{fill:rgba(40,30,10,0.75);}
+body.theme-parchment #toast{background:rgba(235,220,185,.96);}
+body.theme-parchment #modal{background:#d4c4a0;}
+body.theme-parchment #mod-ov{background:rgba(180,160,120,0.5);}
+
+body.theme-underdark{--gold:#9966cc;--dk-gold:#5c3d8f;--parch:#c8b8e0;--crimson:#6a0dad;--pbg:rgba(15,8,25,0.97);background:#0a0515;}
+body.theme-underdark .district-zone{stroke:rgba(120,80,180,0.35);}
+body.theme-underdark #toast{background:rgba(15,8,25,.96);}
+body.theme-underdark #modal{background:#120820;}
+body.theme-underdark #mod-ov{background:rgba(10,5,20,0.72);}
+
+body.theme-blood{--gold:#cc4444;--dk-gold:#8b2020;--parch:#e8c8c8;--crimson:#ff0000;--pbg:rgba(20,5,5,0.97);background:#0a0202;}
+body.theme-blood .district-zone{stroke:rgba(180,60,60,0.35);}
+body.theme-blood #toast{background:rgba(20,5,5,.96);}
+body.theme-blood #modal{background:#180505;}
+body.theme-blood #mod-ov{background:rgba(20,0,0,0.72);}
+
+#theme-picker{position:absolute;top:12px;right:12px;z-index:10;display:flex;gap:4px;}
+.theme-dot{width:16px;height:16px;border-radius:50%;border:2px solid rgba(255,255,255,0.15);cursor:pointer;transition:all .2s;}
+.theme-dot:hover{border-color:rgba(255,255,255,0.5);transform:scale(1.2);}
+.theme-dot.active{border-color:rgba(255,255,255,0.8);}
+.theme-dot:active{border-color:rgba(255,255,255,0.8);}
+/* TIMELINE PLAYBACK */
+#timeline-bar{display:none;position:fixed;bottom:0;left:0;right:0;height:42px;background:rgba(10,5,0,0.97);border-top:1px solid var(--gold);z-index:70;align-items:center;padding:0 12px;gap:8px;}
+#timeline-bar.visible{display:flex;}
+#tl-label{font-family:'Cinzel',serif;font-size:8px;color:var(--gold);letter-spacing:.5px;text-transform:uppercase;white-space:nowrap;flex-shrink:0;}
+#tl-slider{flex:1;accent-color:var(--gold);cursor:pointer;}
+#tl-info{font-size:9px;color:var(--parch);white-space:nowrap;max-width:200px;overflow:hidden;text-overflow:ellipsis;flex-shrink:0;}
+#tl-close{background:transparent;border:1px solid var(--dk-gold);color:var(--gold);font-family:'Cinzel',serif;font-size:8px;padding:3px 8px;cursor:pointer;flex-shrink:0;}
+#tl-close:hover{background:rgba(180,100,0,.18);}
+#tl-close:active{background:rgba(180,100,0,.18);}
+/* BULK SELECTION */
+.district-item.bulk-sel{background:rgba(180,100,0,0.15);border-left:2px solid var(--gold);}
+#bulk-bar{display:none;padding:5px 8px;background:rgba(80,40,0,0.18);border-bottom:1px solid rgba(138,111,48,0.18);gap:5px;align-items:center;flex-shrink:0;}
+#bulk-bar.visible{display:flex;}
+#bulk-count{font-size:9px;color:var(--gold);flex:1;}
+.bulk-btn{background:transparent;border:1px solid rgba(138,111,48,0.28);color:rgba(200,168,76,0.55);font-family:'Cinzel',serif;font-size:7.5px;letter-spacing:.5px;text-transform:uppercase;cursor:pointer;padding:3px 6px;transition:all .2s;}
+.bulk-btn:hover{border-color:var(--gold);color:var(--gold);}
+.bulk-btn:active{border-color:var(--gold);color:var(--gold);}
+/* MAP PINS */
+.map-pin{cursor:pointer;transition:transform .15s;}
+.map-pin:hover{transform:scale(1.3);}
+.pin-label{font-family:'Cinzel',serif;font-size:7px;fill:var(--parch);pointer-events:none;text-anchor:middle;}
+#pin-toggle{position:absolute;bottom:12px;left:90px;z-index:10;padding:5px 10px;background:rgba(10,5,0,.92);border:1px solid var(--dk-gold);color:var(--gold);font-family:'Cinzel',serif;font-size:8px;letter-spacing:1px;text-transform:uppercase;cursor:pointer;transition:all .2s;}
+#pin-toggle:hover{background:rgba(180,100,0,.18);border-color:var(--gold);}
+#pin-toggle:active{background:rgba(180,100,0,.18);border-color:var(--gold);}
+#pin-toggle.active{border-color:var(--gold);background:rgba(180,100,0,.15);}
+/* PLAYER VIEW */
+body.player-view #side-panel{display:none;}
+body.player-view #panel-toggle{display:none;}
+body.player-view #mobile-bar{display:none !important;}
+body.player-view #map-reset{bottom:12px;}
+body.player-view #toast{bottom:20px;}
+#player-toggle{position:absolute;bottom:12px;right:12px;z-index:10;padding:5px 10px;background:rgba(10,5,0,.92);border:1px solid var(--dk-gold);color:var(--gold);font-family:'Cinzel',serif;font-size:8px;letter-spacing:1px;text-transform:uppercase;cursor:pointer;transition:all .2s;}
+#player-toggle:hover{background:rgba(180,100,0,.18);border-color:var(--gold);}
+#player-toggle:active{background:rgba(180,100,0,.18);border-color:var(--gold);}
+body.player-view #player-toggle{border-color:var(--gold);background:rgba(180,100,0,.15);}
+body.player-view .dlabel{pointer-events:none;}
+body.player-view .district-zone{pointer-events:none;}
+/* DISTRICT RUMORS */
+#mrumor{font-style:italic;font-size:9.5px;color:rgba(200,168,76,0.5);text-align:center;min-height:14px;padding:2px 8px;cursor:pointer;transition:color .2s;}
+#mrumor:hover{color:rgba(200,168,76,0.75);}
+#mrumor:active{color:rgba(200,168,76,0.75);}
+/* DISTRICT SEARCH */
+#dist-search{width:100%;background:rgba(20,10,0,0.6);border:1px solid rgba(138,111,48,0.25);color:var(--parch);font-family:'IM Fell English',serif;font-size:10px;padding:5px 8px;box-sizing:border-box;outline:none;margin-bottom:0;}
+#dist-search:focus{border-color:var(--gold);}
+#dist-search::placeholder{color:rgba(200,168,76,0.25);font-style:italic;}
 /* CORRUPTION MODAL */
 #mod-ov{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.72);z-index:100;align-items:center;justify-content:center;backdrop-filter:blur(2px);}
 #mod-ov.open{display:flex;}
@@ -294,10 +394,13 @@ body{background:#0a0602;font-family:'IM Fell English',serif;overflow:hidden;heig
   .mob-btn:last-child{border-right:none;}
   .mob-btn.active{color:var(--gold);background:rgba(180,100,0,0.15);}
   #map-reset{bottom:calc(64px + env(safe-area-inset-bottom));}
+  #pin-toggle{bottom:calc(64px + env(safe-area-inset-bottom));left:90px;}
+  #theme-picker{top:8px;right:8px;}
+  #player-toggle{bottom:calc(64px + env(safe-area-inset-bottom));right:8px;font-size:7px;padding:4px 6px;}
   #toast{bottom:calc(64px + env(safe-area-inset-bottom));}
   #modal{width:95vw;}
   .stab{min-height:44px;font-size:9px;padding:8px 4px;}
-  #undo-btn,#new-sess-btn{min-height:44px;padding:8px 6px;}
+  #undo-btn,#new-sess-btn,#redo-btn,#sess-sum-btn,#tl-btn{min-height:44px;padding:8px 6px;}
   .dmb,.eab,.fab{min-height:44px;padding:9px 4px;}
   .rel-adj{width:32px;height:32px;font-size:15px;}
   .mact{min-height:44px;font-size:11px;}
@@ -309,6 +412,10 @@ body{background:#0a0602;font-family:'IM Fell English',serif;overflow:hidden;heig
   .log-sub{font-size:10px;}
   .house-item{padding:10px 12px;}
   #mnotes-ta{font-size:12px;}
+  #dist-search{font-size:12px;padding:8px 10px;}
+  #timeline-bar{padding:0 8px;}
+  #tl-label{font-size:7px;}
+  #tl-info{font-size:8px;max-width:120px;}
   .ebtn{min-height:44px;font-size:10px;padding:8px 14px;}
   #exp-code{font-size:11px;}
 }
@@ -361,6 +468,14 @@ body{background:#0a0602;font-family:'IM Fell English',serif;overflow:hidden;heig
   </div>
   <button id="map-reset" onclick="resetMapView()">Reset View</button>
 </div>
+<div id="theme-picker">
+  <div class="theme-dot active" style="background:#c9a84c" onclick="setTheme('')" title="Default"></div>
+  <div class="theme-dot" style="background:#d4c4a0" onclick="setTheme('parchment')" title="Parchment"></div>
+  <div class="theme-dot" style="background:#9966cc" onclick="setTheme('underdark')" title="Underdark"></div>
+  <div class="theme-dot" style="background:#cc4444" onclick="setTheme('blood')" title="Blood"></div>
+</div>
+<button id="pin-toggle" onclick="togglePinMode()" title="Toggle pin placement mode">📌 Pins</button>
+<button id="player-toggle" onclick="togglePlayerView()" title="Toggle player-safe view">👁 Player View</button>
 <button id="panel-toggle" onclick="togglePanel()" title="Toggle panel">◀</button>
 <div id="side-panel">
   <div id="panel-header">
@@ -380,14 +495,15 @@ body{background:#0a0602;font-family:'IM Fell English',serif;overflow:hidden;heig
       <button class="stab" onclick="setDmTab('houses')">Houses</button>
       <button class="stab" onclick="setDmTab('log')">Change Log</button>
     </div>
-    <div id="tab-districts" class="dm-tab active"><div id="district-list"></div></div>
+    <div id="tab-districts" class="dm-tab active"><div id="bulk-bar"><span id="bulk-count">0 selected</span><button class="bulk-btn" onclick="bulkApply(1)">▲ +1</button><button class="bulk-btn" onclick="bulkApply(-1)">▼ −1</button><button class="bulk-btn" onclick="bulkSetLevel()">Set</button><button class="bulk-btn" onclick="bulkClear()">Clear</button></div><input id="dist-search" type="text" placeholder="Search districts…" oninput="filterDistricts(this.value)"><div id="district-list"></div></div>
     <div id="tab-houses" class="dm-tab"><div id="house-list"></div></div>
     <div id="tab-log" class="dm-tab">
       <div id="log-inner">
         <div id="undo-bar">
-          <button id="undo-btn" disabled onclick="undoLast()">↩ Undo Last</button>
+          <button id="undo-btn" disabled onclick="undoLast()">↩ Undo</button><button id="redo-btn" disabled onclick="redoLast()">↪ Redo</button>
           <span id="undo-cnt"></span>
-          <button id="new-sess-btn" onclick="newSession()">⚑ New Session</button>
+          <button id="sess-sum-btn" onclick="copySessionSummary()" title="Copy session recap to clipboard">📋 Recap</button><button id="new-sess-btn" onclick="newSession()">⚑ New Session</button>
+          <button id="tl-btn" onclick="openTimeline()" title="Replay history step by step" style="background:transparent;border:1px solid rgba(138,111,48,0.28);color:rgba(200,168,76,0.45);font-family:'Cinzel',serif;font-size:8px;letter-spacing:.5px;text-transform:uppercase;cursor:pointer;padding:3px 6px;">⏮ Replay</button>
         </div>
         <div id="change-log"></div>
       </div>
@@ -430,6 +546,10 @@ body{background:#0a0602;font-family:'IM Fell English',serif;overflow:hidden;heig
   <!-- FACTIONS PANEL -->
   <div id="factions-panel">
     <div id="fact-list"></div>
+    <div id="hrel-section">
+      <div id="hrel-hdr">Inter-House Relations</div>
+      <div id="hrel-grid"></div>
+    </div>
     <div id="fact-bottom">
       <button class="fab" id="btn-ah" onclick="addHouse()">+ Add House</button>
       <button class="fab" id="btn-dh" onclick="deleteSelHouse()">— Remove</button>
@@ -455,6 +575,7 @@ body{background:#0a0602;font-family:'IM Fell English',serif;overflow:hidden;heig
       <button class="cb" data-lv="5" onclick="selLv(5)">V</button>
     </div>
     <div id="cdesc">Untouched by shadow</div>
+    <div id="mrumor"></div>
     <div id="mrelprev"></div>
     <div id="mnotes-row">
       <label id="mnotes-lbl" for="mnotes-ta">DM Notes</label>
@@ -480,6 +601,7 @@ body{background:#0a0602;font-family:'IM Fell English',serif;overflow:hidden;heig
   </div>
 </div>
 <div id="toast"></div>
+<div id="timeline-bar"><span id="tl-label">History</span><input type="range" id="tl-slider" min="0" max="0" value="0" oninput="timelineSeek(this.value)"><span id="tl-info">Current</span><button id="tl-close" onclick="closeTimeline()">✕ Exit</button></div>
 
 <script>
 // ━━━━ CONSTANTS ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -487,8 +609,16 @@ const DESCS=['Untouched by shadow','Whispers in dark corners','Corruption spread
 const COLORS=['#6baed6','#74c476','#fd8d3c','#9e9ac8','#fc8d59','#78c679','#e6550d','#3182bd'];
 const MAX_HIST=30;
 const CK='cct-corrupt-v1',GK='cct-geo-v1',HK='cct-houses-v1',RK='cct-rel-v1',LK='cct-log-v1';
-const EQK='cct-eq-v1',SDK='cct-savedef-v1',NK='cct-notes-v1',SK='cct-session-v1';
+const EQK='cct-eq-v1',SDK='cct-savedef-v1',NK='cct-notes-v1',SK='cct-session-v1',HRK='cct-hrel-v1';
 const EQ_DEFAULT='oldR - delta';
+const DEFAULT_RUMORS=[
+  ['All is quiet.','The streets are calm, merchants trade freely.'],
+  ['Strange whispers echo after dark.','Locals glance over their shoulders more than usual.','A beggar mutters about shadows in the alley.'],
+  ['Shops are closing early.','Guards seem nervous on their patrols.','A merchant was found dead — officially an accident.'],
+  ['Armed thugs walk openly.','A cult symbol was found carved into the temple door.','Locals refuse to speak to outsiders.'],
+  ['Screams in the night go uninvestigated.','The watch has abandoned their post.','Bodies are found each morning.'],
+  ['The district is lost.','An unnatural fog clings to every corner.','Even the rats have fled.']
+];
 const BAKED=null;/*__BM__*/
 
 // ━━━━ DEFAULT DATA ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -522,8 +652,8 @@ const DH=[
 ];
 
 // ━━━━ STATE ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-let CS={},REL={},GEO=[],HS=[],LOG=[],EQ=EQ_DEFAULT,NOTES={},SESS=0;
-let mode='dm',dmTab='districts',selEdit=null,selHouse=null,activeId=null,pendLv=null;
+let CS={},REL={},GEO=[],HS=[],LOG=[],EQ=EQ_DEFAULT,NOTES={},SESS=0,REDO=[],HREL={},EVENTS={},PINS=[];
+let mode='dm',dmTab='districts',selEdit=null,selHouse=null,activeId=null,pendLv=null,bulkSel=new Set();
 let dragV=null,dragging=false;
 
 // ━━━━ STORAGE ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -538,6 +668,9 @@ function load(){
     if(BAKED.eq)defEQ=BAKED.eq;
     if(BAKED.notes)NOTES=BAKED.notes;
     if(BAKED.sess)SESS=BAKED.sess;
+    if(BAKED.hrel)HREL=BAKED.hrel;
+    if(BAKED.events)EVENTS=BAKED.events;
+    if(BAKED.pins)PINS=BAKED.pins;
   } else {
     // Fall back to localStorage user-saved defaults
     try{const s=localStorage.getItem(SDK);if(s){const ud=JSON.parse(s);if(ud.geo)defGEO=ud.geo;if(ud.hs)defHS=ud.hs;if(ud.cs)defCS=ud.cs;if(ud.rel)defREL=ud.rel;}}catch(e){}
@@ -553,6 +686,9 @@ function load(){
   try{const s=localStorage.getItem(EQK);if(s)EQ=s;}catch(e){}
   try{const s=localStorage.getItem(NK);if(s)NOTES=JSON.parse(s);}catch(e){}
   try{const s=localStorage.getItem(SK);if(s)SESS=parseInt(s)||0;}catch(e){}
+  try{const s=localStorage.getItem(HRK);if(s)HREL=JSON.parse(s);}catch(e){}
+  try{const s=localStorage.getItem(EVK);if(s)EVENTS=JSON.parse(s);}catch(e){}
+  try{const s=localStorage.getItem(PNK);if(s)PINS=JSON.parse(s);}catch(e){}
   if(!GEO.length) GEO=JSON.parse(JSON.stringify(defGEO));
   if(!HS.length)  HS=JSON.parse(JSON.stringify(defHS));
   defGEO.forEach(d=>{if(CS[d.id]===undefined)CS[d.id]=0;});
@@ -565,6 +701,9 @@ const saveR=()=>localStorage.setItem(RK,JSON.stringify(REL));
 const saveL=()=>localStorage.setItem(LK,JSON.stringify(LOG));
 const saveN=()=>localStorage.setItem(NK,JSON.stringify(NOTES));
 const saveS=()=>localStorage.setItem(SK,String(SESS));
+const saveHR=()=>localStorage.setItem(HRK,JSON.stringify(HREL));
+const saveEV=()=>localStorage.setItem(EVK,JSON.stringify(EVENTS));
+const savePins=()=>localStorage.setItem(PNK,JSON.stringify(PINS));
 
 // ━━━━ UTILS ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 const pts2s=p=>p.map(v=>v[0]+','+v[1]).join(' ');
@@ -588,6 +727,7 @@ function setMode(m){
   selEdit=null;
   if(m==='edit')renderEditPanel();
   if(m==='factions')renderFactionsPanel();
+  renderHrelGrid();
   renderSVG();
 }
 function setDmTab(t){
@@ -728,7 +868,8 @@ function renderDistTab(){
   GEO.forEach(d=>{
     const lv=CS[d.id]||0,h=getHouse(d.id);
     const row=document.createElement('div');row.className='district-item';
-    row.onclick=()=>openModal(d.id);
+    row.onclick=(e)=>{if(!toggleBulkSel(d.id,row,e))openModal(d.id);};
+    if(bulkSel.has(d.id))row.classList.add('bulk-sel');
     const dot=document.createElement('div');dot.className='d-hdot';
     dot.style.background=h?h.color:'rgba(100,80,60,0.28)';dot.title=h?h.name:'Unassigned';
     const nm=document.createElement('span');nm.className='d-name';nm.textContent=d.name;
@@ -741,6 +882,67 @@ function renderDistTab(){
   });
 }
 
+function filterDistricts(q){
+  q=q.toLowerCase().trim();
+  document.querySelectorAll('.district-item').forEach(el=>{
+    const name=el.querySelector('.d-name').textContent.toLowerCase();
+    el.style.display=(!q||name.includes(q))?'':'none';
+  });
+}
+function toggleBulkSel(id,el,e){
+  if(e.shiftKey||e.ctrlKey||e.metaKey){
+    e.preventDefault();e.stopPropagation();
+    if(bulkSel.has(id))bulkSel.delete(id);else bulkSel.add(id);
+    el.classList.toggle('bulk-sel',bulkSel.has(id));
+    updateBulkBar();
+    return true;
+  }
+  return false;
+}
+function updateBulkBar(){
+  const bar=document.getElementById('bulk-bar');
+  bar.classList.toggle('visible',bulkSel.size>0);
+  document.getElementById('bulk-count').textContent=bulkSel.size+' selected';
+}
+function bulkClear(){bulkSel.clear();renderDistTab();updateBulkBar();}
+function bulkApply(delta){
+  if(!bulkSel.size)return;
+  let count=0;
+  bulkSel.forEach(id=>{
+    const cur=CS[id]||0,nv=Math.max(0,Math.min(5,cur+delta));
+    if(nv!==cur){
+      const h=getHouse(id),oldR=h?(REL[h.id]||0):null;
+      CS[id]=nv;
+      let newR=null;
+      if(h){newR=evalEq(oldR,nv-cur,nv,cur);REL[h.id]=newR;saveR();}
+      const d=GEO.find(x=>x.id===id);
+      LOG.push({ts:Date.now(),distId:id,dn:d.name,oldC:cur,newC:nv,hid:h?h.id:null,hn:h?h.name:null,oldR,newR});
+      count++;
+    }
+  });
+  if(count){REDO=[];saveC();saveL();renderSVG();renderDMPanel();toast((delta>0?'▲':'▼')+' '+count+' district'+(count>1?'s':'')+' updated');}
+  bulkClear();
+}
+function bulkSetLevel(){
+  if(!bulkSel.size)return;
+  const lv=parseInt(prompt('Set corruption level (0-5) for '+bulkSel.size+' districts:','0'));
+  if(isNaN(lv)||lv<0||lv>5)return;
+  let count=0;
+  bulkSel.forEach(id=>{
+    const cur=CS[id]||0;
+    if(lv!==cur){
+      const h=getHouse(id),oldR=h?(REL[h.id]||0):null,delta=lv-cur;
+      CS[id]=lv;
+      let newR=null;
+      if(h){newR=evalEq(oldR,delta,lv,cur);REL[h.id]=newR;saveR();}
+      const d=GEO.find(x=>x.id===id);
+      LOG.push({ts:Date.now(),distId:id,dn:d.name,oldC:cur,newC:lv,hid:h?h.id:null,hn:h?h.name:null,oldR,newR});
+      count++;
+    }
+  });
+  if(count){REDO=[];saveC();saveL();renderSVG();renderDMPanel();toast('Set '+count+' district'+(count>1?'s':'')+' to Tier '+lv);}
+  bulkClear();
+}
 function renderHousesTab(){
   const el=document.getElementById('house-list');el.innerHTML='';
   HS.forEach(h=>{
@@ -790,6 +992,7 @@ function renderLogTab(){
   const realEntries=LOG.filter(e=>!e.type);
   ub.disabled=!realEntries.length;
   uc.textContent=realEntries.length?realEntries.length+' change'+(realEntries.length>1?'s':''):'';
+  const rb=document.getElementById('redo-btn');if(rb)rb.disabled=!REDO.length;
   if(!LOG.length){const e=document.createElement('div');e.className='log-empty';e.textContent='No changes recorded yet.';log.appendChild(e);return;}
   [...LOG].reverse().forEach(e=>{
     if(e.type==='session'){
@@ -822,7 +1025,27 @@ function openModal(id){
   else mh.style.display='none';
   updateCBtns(pendLv);
   document.getElementById('mnotes-ta').value=NOTES[id]||'';
+  showRumor(id,CS[id]||0);
   document.getElementById('mod-ov').classList.add('open');
+}
+function showRumor(distId,tier){
+  const el=document.getElementById('mrumor');
+  // Check for custom event first
+  const custom=EVENTS[distId]&&EVENTS[distId][tier];
+  const pool=custom?[custom]:DEFAULT_RUMORS[tier]||['...'];
+  el.textContent='"'+pool[Math.floor(Math.random()*pool.length)]+'"';
+  el.title='Click to re-roll rumor (right-click to edit)';
+  el.onclick=()=>showRumor(distId,pendLv!==null?pendLv:tier);
+  el.oncontextmenu=(e)=>{
+    e.preventDefault();
+    const cur=EVENTS[distId]&&EVENTS[distId][tier]||'';
+    const val=prompt('Custom rumor for this district at Tier '+tier+':\n(Leave empty for defaults)',cur);
+    if(val===null)return;
+    if(!EVENTS[distId])EVENTS[distId]={};
+    if(val.trim())EVENTS[distId][tier]=val.trim();
+    else{delete EVENTS[distId][tier];if(!Object.keys(EVENTS[distId]).length)delete EVENTS[distId];}
+    saveEV();showRumor(distId,tier);
+  };
 }
 function closeModal(){document.getElementById('mod-ov').classList.remove('open');activeId=null;pendLv=null;}
 function evalEq(oldR,delta,newTier,oldTier){
@@ -830,7 +1053,7 @@ function evalEq(oldR,delta,newTier,oldTier){
   catch(e){return Math.max(0,Math.min(10,oldR-delta));}
 }
 function selLv(lv){
-  pendLv=lv;updateCBtns(lv);
+  pendLv=lv;updateCBtns(lv);if(activeId)showRumor(activeId,lv);
   const prev=document.getElementById('mrelprev');
   if(activeId){
     const h=getHouse(activeId),cur=CS[activeId]||0;
@@ -859,7 +1082,7 @@ function confirmLv(){
   if(h){newR=evalEq(oldR,delta,pendLv,oldC);REL[h.id]=newR;saveR();}
   const d=GEO.find(x=>x.id===activeId);
   const entry={ts:Date.now(),distId:activeId,dn:d.name,oldC,newC:pendLv,hid:h?h.id:null,hn:h?h.name:null,oldR,newR};
-  LOG.push(entry);
+  LOG.push(entry);REDO=[];
   if(h&&oldR!==null&&newR!==null){
     const THRESHOLDS=[{v:7,up:'Loyal',down:null},{v:5,up:'Cooperative',down:null},{v:3,up:null,down:'Wary'},{v:1,up:null,down:'Hostile'}];
     THRESHOLDS.forEach(t=>{
@@ -876,17 +1099,26 @@ function confirmLv(){
 
 // ━━━━ UNDO ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 function undoLast(){
-  // Find last real corruption entry (not session/threshold markers)
   const idx=LOG.map((e,i)=>({e,i})).filter(({e})=>!e.type).map(({i})=>i).pop();
   if(idx===undefined)return;
   const e=LOG[idx];
-  // Remove this entry and any trailing markers after it
-  LOG.splice(idx);
+  const trailing=LOG.splice(idx);
+  REDO.push({entry:e,trailing});
   CS[e.distId]=e.oldC;
   if(e.hid)REL[e.hid]=e.oldR;
   saveC();saveR();saveL();
   renderSVG();renderDMPanel();
   toast('↩ Undone: '+e.dn+' Tier '+e.newC+'→'+e.oldC);
+}
+function redoLast(){
+  if(!REDO.length)return;
+  const {entry:e,trailing}=REDO.pop();
+  CS[e.distId]=e.newC;
+  if(e.hid)REL[e.hid]=e.newR;
+  trailing.forEach(t=>LOG.push(t));
+  saveC();saveR();saveL();
+  renderSVG();renderDMPanel();
+  toast('↪ Redone: '+e.dn+' Tier '+e.oldC+'→'+e.newC);
 }
 
 function newSession(){
@@ -897,10 +1129,39 @@ function newSession(){
   toast('Session '+SESS+' started');
 }
 
+function copySessionSummary(){
+  // Find entries since last session marker (or all if no marker)
+  let start=0;
+  for(let i=LOG.length-1;i>=0;i--){if(LOG[i].type==='session'){start=i+1;break;}}
+  const entries=LOG.slice(start);
+  if(!entries.length){toast('No changes this session');return;}
+  const lines=['═══ Session '+(SESS||1)+' Recap ═══',''];
+  const changes=entries.filter(e=>!e.type);
+  const thresholds=entries.filter(e=>e.type==='threshold');
+  if(changes.length){
+    lines.push('Corruption Changes:');
+    changes.forEach(e=>{
+      lines.push('  '+(e.newC>e.oldC?'▲':'▼')+' '+e.dn+': Tier '+e.oldC+' → '+e.newC+(e.hid?' ('+e.hn+': '+e.oldR+' → '+e.newR+')':''));
+    });
+    lines.push('');
+  }
+  if(thresholds.length){
+    lines.push('Status Changes:');
+    thresholds.forEach(e=>{
+      lines.push('  '+(e.direction==='down'?'⚠':'✦')+' '+e.hn+' became '+e.status);
+    });
+    lines.push('');
+  }
+  // Summary stats
+  const ups=changes.filter(e=>e.newC>e.oldC).length,downs=changes.filter(e=>e.newC<e.oldC).length;
+  lines.push('Summary: '+ups+' increase'+(ups!==1?'s':'')+', '+downs+' decrease'+(downs!==1?'s':''));
+  navigator.clipboard.writeText(lines.join('\n')).then(()=>toast('📋 Session recap copied!'));
+}
+
 // ━━━━ SAVE DEFAULT / FORMULA ━━━━━━━━━━━━━━━━━━━━━━━━━━━
 function saveAsDefault(){
   if(!confirm('Bake current state into a new HTML file?\n\nAnyone who opens the downloaded file will start with your current districts, factions, corruption levels, relations, and formula — no setup needed.'))return;
-  const state={geo:GEO,hs:HS,cs:CS,rel:REL,eq:EQ,notes:NOTES,sess:SESS};
+  const state={geo:GEO,hs:HS,cs:CS,rel:REL,eq:EQ,notes:NOTES,sess:SESS,hrel:HREL,events:EVENTS,pins:PINS};
   const marker=/const BAKED=.*?;\/\*__BM__\*\//;
   const replacement='const BAKED='+JSON.stringify(state)+';/*__BM__*/';
   const html=document.documentElement.outerHTML.replace(marker,replacement);
@@ -993,6 +1254,35 @@ function closeExport(){document.getElementById('exp-ov').classList.remove('open'
 window.importGeo=data=>{GEO=data;saveG();renderSVG();if(mode==='edit')renderEditPanel();toast('Imported!');};
 
 // ━━━━ FACTIONS ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+function hrelKey(a,b){return a<b?a+'|'+b:b+'|'+a;}
+function getHrelStance(a,b){return HREL[hrelKey(a,b)]||'neutral';}
+function cycleHrel(a,b){
+  const k=hrelKey(a,b),stances=['neutral','allied','rival'];
+  const cur=HREL[k]||'neutral',next=stances[(stances.indexOf(cur)+1)%3];
+  if(next==='neutral')delete HREL[k];else HREL[k]=next;
+  saveHR();renderHrelGrid();
+}
+function renderHrelGrid(){
+  const el=document.getElementById('hrel-grid');if(!el)return;el.innerHTML='';
+  for(let i=0;i<HS.length;i++){
+    for(let j=i+1;j<HS.length;j++){
+      const a=HS[i],b=HS[j],stance=getHrelStance(a.id,b.id);
+      const row=document.createElement('div');row.className='hrel-row';
+      row.onclick=()=>cycleHrel(a.id,b.id);
+      row.title='Click to cycle: Neutral → Allied → Rival';
+      const dots=document.createElement('div');dots.className='hrel-dots';
+      const d1=document.createElement('div');d1.className='hrel-dot';d1.style.background=a.color;
+      const d2=document.createElement('div');d2.className='hrel-dot';d2.style.background=b.color;
+      dots.appendChild(d1);dots.appendChild(d2);
+      const names=document.createElement('span');names.className='hrel-names';
+      names.textContent=a.name+' ↔ '+b.name;
+      const badge=document.createElement('span');badge.className='hrel-stance '+stance;
+      badge.textContent=stance.charAt(0).toUpperCase()+stance.slice(1);
+      row.appendChild(dots);row.appendChild(names);row.appendChild(badge);
+      el.appendChild(row);
+    }
+  }
+}
 function renderFactionsPanel(){
   const con=document.getElementById('fact-list');con.innerHTML='';
   HS.forEach(h=>{
@@ -1085,7 +1375,7 @@ function resetRelations(){if(!confirm('Reset ALL house relations to 10?'))return
 document.getElementById('mod-ov').addEventListener('click',e=>{if(e.target===document.getElementById('mod-ov'))closeModal();});
 document.addEventListener('keydown',e=>{
   if(e.key==='Escape'){closeModal();closeExport();}
-  if((e.ctrlKey||e.metaKey)&&e.key==='z'){e.preventDefault();undoLast();}
+  if((e.ctrlKey||e.metaKey)&&e.shiftKey&&e.key==='z'){e.preventDefault();redoLast();}else if((e.ctrlKey||e.metaKey)&&e.key==='z'){e.preventDefault();undoLast();}
 });
 
 // ━━━━ PANEL TOGGLE ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -1108,6 +1398,127 @@ function togglePanel(){
   panelOpen=!panelOpen;
   document.getElementById('side-panel').classList.toggle('collapsed',!panelOpen);
   document.getElementById('panel-toggle').textContent=panelOpen?'◀':'▶';
+}
+
+// ━━━━ THEMES ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+let currentTheme='';
+function setTheme(theme){
+  document.body.classList.remove('theme-parchment','theme-underdark','theme-blood');
+  if(theme)document.body.classList.add('theme-'+theme);
+  currentTheme=theme;
+  localStorage.setItem('cct-theme-v1',theme);
+  document.querySelectorAll('.theme-dot').forEach(d=>d.classList.remove('active'));
+  const themes=['','parchment','underdark','blood'];
+  const idx=themes.indexOf(theme);
+  if(idx>=0)document.querySelectorAll('.theme-dot')[idx]?.classList.add('active');
+  renderSVG();
+}
+(function loadTheme(){
+  const t=localStorage.getItem('cct-theme-v1');
+  if(t)setTheme(t);
+})();
+
+// ━━━━ TIMELINE PLAYBACK ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+let tlActive=false,tlSnapCS={},tlSnapREL={};
+function openTimeline(){
+  const real=LOG.filter(e=>!e.type);
+  if(!real.length){toast('No changes to replay');return;}
+  // Snapshot current state to restore later
+  tlSnapCS=JSON.parse(JSON.stringify(CS));
+  tlSnapREL=JSON.parse(JSON.stringify(REL));
+  tlActive=true;
+  const slider=document.getElementById('tl-slider');
+  slider.max=real.length;slider.value=real.length;
+  document.getElementById('timeline-bar').classList.add('visible');
+  document.getElementById('tl-info').textContent='Current ('+real.length+' changes)';
+  toast('⏮ Timeline open — drag slider to replay');
+}
+function closeTimeline(){
+  if(!tlActive)return;
+  CS=JSON.parse(JSON.stringify(tlSnapCS));REL=JSON.parse(JSON.stringify(tlSnapREL));
+  tlActive=false;
+  document.getElementById('timeline-bar').classList.remove('visible');
+  renderSVG();renderDMPanel();
+  toast('Timeline closed — state restored');
+}
+function timelineSeek(val){
+  if(!tlActive)return;
+  const real=LOG.filter(e=>!e.type);
+  const n=parseInt(val);
+  // Reconstruct state up to step n
+  // Start from defaults: all corruption 0, all relations 10
+  const tCS={},tREL={};
+  GEO.forEach(d=>tCS[d.id]=0);HS.forEach(h=>tREL[h.id]=10);
+  for(let i=0;i<n&&i<real.length;i++){
+    const e=real[i];
+    tCS[e.distId]=e.newC;
+    if(e.hid)tREL[e.hid]=e.newR;
+  }
+  // Temporarily apply reconstructed state for rendering
+  const savedCS=CS,savedREL=REL;
+  CS=tCS;REL=tREL;
+  renderSVG();renderDMPanel();
+  CS=savedCS;REL=savedREL;
+  // Overwrite live state with reconstructed (will restore on close)
+  for(const k in tCS)CS[k]=tCS[k];
+  for(const k in tREL)REL[k]=tREL[k];
+  const info=document.getElementById('tl-info');
+  if(n===0)info.textContent='Before any changes';
+  else if(n>=real.length)info.textContent='Current ('+real.length+' changes)';
+  else{const e=real[n-1];info.textContent='Step '+n+': '+e.dn+' → Tier '+e.newC;}
+}
+
+// ━━━━ MAP PINS ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+let pinMode=false;
+function togglePinMode(){
+  pinMode=!pinMode;
+  document.getElementById('pin-toggle').classList.toggle('active',pinMode);
+  document.getElementById('map-wrapper').style.cursor=pinMode?'crosshair':'grab';
+  toast(pinMode?'📌 Click map to place pin':'Pin mode off');
+}
+function addPin(x,y){
+  const label=prompt('Pin label (short):','');
+  if(label===null){togglePinMode();return;}
+  PINS.push({id:'pin-'+Date.now(),x:Math.round(x),y:Math.round(y),label:label.trim()||'•',color:'#ffd700'});
+  savePins();renderSVG();togglePinMode();
+}
+function removePin(id){
+  PINS=PINS.filter(p=>p.id!==id);savePins();renderSVG();toast('Pin removed');
+}
+function renderPins(svg){
+  PINS.forEach(p=>{
+    const g=document.createElementNS('http://www.w3.org/2000/svg','g');
+    g.setAttribute('class','map-pin');
+    // Pin marker (triangle + circle)
+    const circle=document.createElementNS('http://www.w3.org/2000/svg','circle');
+    circle.setAttribute('cx',p.x);circle.setAttribute('cy',p.y);
+    circle.setAttribute('r',5);circle.setAttribute('fill',p.color);
+    circle.setAttribute('stroke','rgba(0,0,0,0.6)');circle.setAttribute('stroke-width',1.5);
+    g.appendChild(circle);
+    if(p.label&&p.label!=='•'){
+      const txt=document.createElementNS('http://www.w3.org/2000/svg','text');
+      txt.setAttribute('x',p.x);txt.setAttribute('y',p.y-9);
+      txt.setAttribute('class','pin-label');txt.textContent=p.label;
+      g.appendChild(txt);
+    }
+    g.addEventListener('contextmenu',e=>{e.preventDefault();removePin(p.id);});
+    g.addEventListener('click',e=>{e.stopPropagation();
+      const nl=prompt('Edit pin label:',p.label);
+      if(nl!==null){p.label=nl.trim()||'•';savePins();renderSVG();}
+    });
+    svg.appendChild(g);
+  });
+}
+
+// ━━━━ PLAYER VIEW ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+let playerView=false;
+function togglePlayerView(){
+  playerView=!playerView;
+  document.body.classList.toggle('player-view',playerView);
+  document.getElementById('player-toggle').textContent=playerView?'👁 DM View':'👁 Player View';
+  renderSVG();
+  if(playerView){closeMobilePanel?.();toast('Player View — districts are display-only');}
+  else toast('DM View restored');
 }
 
 // ━━━━ MAP ZOOM / PAN ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -1133,6 +1544,14 @@ function clampPan(){
   mapTx=Math.min(maxTx,Math.max(minTx,mapTx));
   mapTy=Math.min(maxTy,Math.max(minTy,mapTy));
 }
+
+(function initPinHandler(){
+  document.getElementById('map-svg').addEventListener('click',e=>{
+    if(!pinMode)return;
+    const[x,y]=clientToSVG(e.clientX,e.clientY);
+    addPin(x,y);
+  });
+})();
 
 (function initMapInteraction(){
   const wrap=document.getElementById('map-wrapper');
