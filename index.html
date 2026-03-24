@@ -261,7 +261,7 @@ body{background:#0a0602;font-family:'IM Fell English',serif;overflow:hidden;heig
   #side-panel{
     position:fixed;bottom:0;left:0;right:0;
     width:100%;min-width:0;
-    height:72vh;max-height:72vh;
+    height:72vh;
     border-left:none;border-right:none;
     border-top:2px solid var(--dk-gold);
     border-radius:12px 12px 0 0;
@@ -1050,14 +1050,15 @@ document.addEventListener('keydown',e=>{
 
 // ━━━━ PANEL TOGGLE ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 let panelOpen=true;
-const isMobile=()=>window.innerWidth<=480;
+let _mobPanelBtn=null;
+const isMobile=()=>window.matchMedia("(max-width:480px)").matches;
 function openMobilePanel(){
   document.getElementById('side-panel').classList.add('mob-open');
-  const pb=document.querySelector('.mob-panel-btn');if(pb)pb.classList.add('active');
+  if(_mobPanelBtn)_mobPanelBtn.classList.add('active');
 }
 function closeMobilePanel(){
   document.getElementById('side-panel').classList.remove('mob-open');
-  const pb=document.querySelector('.mob-panel-btn');if(pb)pb.classList.remove('active');
+  if(_mobPanelBtn)_mobPanelBtn.classList.remove('active');
 }
 function toggleMobilePanel(){
   document.getElementById('side-panel').classList.contains('mob-open')?closeMobilePanel():openMobilePanel();
@@ -1170,11 +1171,9 @@ function clampPan(){
 
 // ━━━━ MOBILE INIT ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 function initMobile(){
-  // Inject drawer handle (CSS hides it on desktop)
   const handle=document.createElement('div');handle.id='drawer-handle';
   document.getElementById('side-panel').prepend(handle);
 
-  // Inject mobile bottom bar (CSS hides it on desktop)
   const bar=document.createElement('div');bar.id='mobile-bar';
   [['dm','☩ DM'],['edit','⌖ Bounds'],['factions','⚜ Factions']].forEach(([m,lbl])=>{
     const b=document.createElement('button');
@@ -1184,12 +1183,11 @@ function initMobile(){
     bar.appendChild(b);
   });
   const pb=document.createElement('button');
-  pb.className='mob-btn mob-panel-btn';pb.textContent='☰ Panel';
+  pb.className='mob-btn mob-panel-btn';pb.textContent='☰ Panel';_mobPanelBtn=pb;
   pb.onclick=toggleMobilePanel;
   bar.appendChild(pb);
   document.body.appendChild(bar);
 
-  // Swipe down on handle to dismiss drawer
   let swipeStartY=null;
   handle.addEventListener('touchstart',e=>{swipeStartY=e.touches[0].clientY;},{passive:true});
   handle.addEventListener('touchmove',e=>{
