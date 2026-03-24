@@ -210,7 +210,7 @@ body{background:#0a0602;font-family:'IM Fell English',serif;overflow:hidden;heig
 /* CORRUPTION MODAL */
 #mod-ov{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.72);z-index:100;align-items:center;justify-content:center;backdrop-filter:blur(2px);}
 #mod-ov.open{display:flex;}
-#modal{background:#120900;border:1px solid var(--dk-gold);width:360px;padding:22px 22px 18px;position:relative;box-shadow:0 0 60px rgba(0,0,0,.9),0 0 20px rgba(180,80,0,.14);}
+#modal{background:#120900;border:1px solid var(--dk-gold);width:360px;max-width:95vw;padding:22px 22px 18px;position:relative;box-shadow:0 0 60px rgba(0,0,0,.9),0 0 20px rgba(180,80,0,.14);}
 #modal::before{content:'';position:absolute;inset:6px;border:1px solid rgba(160,100,0,.13);pointer-events:none;}
 #mtitle{font-family:'Cinzel Decorative',serif;font-size:13px;color:var(--gold);text-align:center;margin-bottom:3px;}
 #mhouse{text-align:center;font-size:10px;font-style:italic;margin-bottom:3px;padding:2px 8px;display:none;}
@@ -248,6 +248,68 @@ body{background:#0a0602;font-family:'IM Fell English',serif;overflow:hidden;heig
 /* TOAST */
 #toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%) translateY(14px);background:rgba(10,5,0,.96);border:1px solid var(--dk-gold);color:var(--gold);font-family:'Cinzel',serif;font-size:9.5px;letter-spacing:1px;padding:8px 16px;opacity:0;transition:all .3s;pointer-events:none;white-space:nowrap;z-index:300;}
 #toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+
+/* ━━━━ RESPONSIVE ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+@media (max-width:768px){
+  #side-panel{width:240px;min-width:240px;}
+  .d-name{font-size:11.5px;}
+  .district-item{padding:6px 10px;}
+  .h-nm{font-size:11px;}
+}
+@media (max-width:480px){
+  #map-wrapper{position:fixed;inset:0;}
+  #side-panel{
+    position:fixed;bottom:0;left:0;right:0;
+    width:100%;min-width:0;
+    height:72vh;max-height:72vh;
+    border-left:none;border-right:none;
+    border-top:2px solid var(--dk-gold);
+    border-radius:12px 12px 0 0;
+    transform:translateY(100%);
+    transition:transform .3s ease;
+    z-index:50;
+    overflow:hidden;
+  }
+  #side-panel.mob-open{transform:translateY(0);}
+  #panel-toggle{display:none;}
+  #mode-toggle{display:none;}
+  #drawer-handle{
+    width:36px;height:4px;background:rgba(200,168,76,0.3);
+    border-radius:2px;margin:8px auto 2px;cursor:grab;flex-shrink:0;
+  }
+  #mobile-bar{
+    position:fixed;bottom:0;left:0;right:0;height:52px;
+    background:rgba(10,5,0,0.97);border-top:1px solid var(--dk-gold);
+    display:flex;align-items:stretch;z-index:60;
+  }
+  .mob-btn{
+    flex:1;background:transparent;
+    border:none;border-right:1px solid rgba(138,111,48,0.2);
+    color:rgba(200,168,76,0.45);font-family:'Cinzel',serif;
+    font-size:9px;letter-spacing:.5px;text-transform:uppercase;
+    cursor:pointer;transition:all .2s;padding:0 2px;
+  }
+  .mob-btn:last-child{border-right:none;}
+  .mob-btn.active{color:var(--gold);background:rgba(180,100,0,0.15);}
+  #map-reset{bottom:64px;}
+  #toast{bottom:64px;}
+  #modal{width:95vw;}
+  .stab{min-height:40px;font-size:9px;padding:8px 4px;}
+  #undo-btn,#new-sess-btn{min-height:40px;padding:8px 6px;}
+  .dmb,.eab,.fab{min-height:40px;padding:9px 4px;}
+  .rel-adj{width:32px;height:32px;font-size:15px;}
+  .mact{min-height:44px;font-size:11px;}
+  .d-name{font-size:12px;}
+  .district-item{padding:8px 12px;}
+  .h-nm{font-size:12px;}
+  .h-rel{font-size:14px;}
+  .log-main{font-size:11px;}
+  .log-sub{font-size:10px;}
+  .house-item{padding:10px 12px;}
+  #mnotes-ta{font-size:12px;}
+}
+#mobile-bar{display:none;}
+#drawer-handle{display:none;}
 </style>
 </head>
 <body>
@@ -479,6 +541,7 @@ function toast(m){const e=document.getElementById('toast');e.textContent=m;e.cla
 function setMode(m){
   mode=m;
   document.querySelectorAll('.mode-btn').forEach((b,i)=>b.classList.toggle('active',['dm','edit','factions'][i]===m));
+  document.querySelectorAll('.mob-mode-btn').forEach((b,i)=>b.classList.toggle('active',['dm','edit','factions'][i]===m));
   document.getElementById('dm-panel').style.display=       m==='dm'?'flex':'none';
   document.getElementById('edit-panel').style.display=     m==='edit'?'flex':'none';
   document.getElementById('factions-panel').style.display= m==='factions'?'flex':'none';
@@ -987,7 +1050,20 @@ document.addEventListener('keydown',e=>{
 
 // ━━━━ PANEL TOGGLE ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 let panelOpen=true;
+const isMobile=()=>window.innerWidth<=480;
+function openMobilePanel(){
+  document.getElementById('side-panel').classList.add('mob-open');
+  const pb=document.querySelector('.mob-panel-btn');if(pb)pb.classList.add('active');
+}
+function closeMobilePanel(){
+  document.getElementById('side-panel').classList.remove('mob-open');
+  const pb=document.querySelector('.mob-panel-btn');if(pb)pb.classList.remove('active');
+}
+function toggleMobilePanel(){
+  document.getElementById('side-panel').classList.contains('mob-open')?closeMobilePanel():openMobilePanel();
+}
 function togglePanel(){
+  if(isMobile()){toggleMobilePanel();return;}
   panelOpen=!panelOpen;
   document.getElementById('side-panel').classList.toggle('collapsed',!panelOpen);
   document.getElementById('panel-toggle').textContent=panelOpen?'◀':'▶';
@@ -1092,8 +1168,39 @@ function clampPan(){
   wrap.addEventListener('touchend',()=>{_panning=false;_touches=null;});
 })();
 
+// ━━━━ MOBILE INIT ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+function initMobile(){
+  // Inject drawer handle (CSS hides it on desktop)
+  const handle=document.createElement('div');handle.id='drawer-handle';
+  document.getElementById('side-panel').prepend(handle);
+
+  // Inject mobile bottom bar (CSS hides it on desktop)
+  const bar=document.createElement('div');bar.id='mobile-bar';
+  [['dm','☩ DM'],['edit','⌖ Bounds'],['factions','⚜ Factions']].forEach(([m,lbl])=>{
+    const b=document.createElement('button');
+    b.className='mob-btn mob-mode-btn'+(mode===m?' active':'');
+    b.textContent=lbl;
+    b.onclick=()=>{setMode(m);openMobilePanel();};
+    bar.appendChild(b);
+  });
+  const pb=document.createElement('button');
+  pb.className='mob-btn mob-panel-btn';pb.textContent='☰ Panel';
+  pb.onclick=toggleMobilePanel;
+  bar.appendChild(pb);
+  document.body.appendChild(bar);
+
+  // Swipe down on handle to dismiss drawer
+  let swipeStartY=null;
+  handle.addEventListener('touchstart',e=>{swipeStartY=e.touches[0].clientY;},{passive:true});
+  handle.addEventListener('touchmove',e=>{
+    if(swipeStartY===null)return;
+    if(e.touches[0].clientY-swipeStartY>60)closeMobilePanel();
+  },{passive:true});
+  handle.addEventListener('touchend',()=>{swipeStartY=null;},{passive:true});
+}
+
 // ━━━━ BOOT ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-load();renderSVG();renderDMPanel();renderEqDisplay();
+load();renderSVG();renderDMPanel();renderEqDisplay();initMobile();
 </script>
 </body>
 </html>
