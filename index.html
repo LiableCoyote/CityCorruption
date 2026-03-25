@@ -645,6 +645,7 @@ const COLORS=['#6baed6','#74c476','#fd8d3c','#9e9ac8','#fc8d59','#78c679','#e655
 const MAX_HIST=30;
 const CK='cct-corrupt-v1',GK='cct-geo-v1',HK='cct-houses-v1',RK='cct-rel-v1',LK='cct-log-v1';
 const EQK='cct-eq-v1',SDK='cct-savedef-v1',NK='cct-notes-v1',SK='cct-session-v1',HRK='cct-hrel-v1',EVK='cct-events-v1',PNK='cct-pins-v1';
+const MIGV=1; // bump when DD boundaries/demonic names change
 const EQ_DEFAULT='oldR - delta';
 const DEFAULT_RUMORS=[
   ['All is quiet.','The streets are calm, merchants trade freely.'],
@@ -724,6 +725,20 @@ function load(){
   try{const s=localStorage.getItem(EVK);if(s)EVENTS=JSON.parse(s);}catch(e){}
   try{const s=localStorage.getItem(PNK);if(s)PINS=JSON.parse(s);}catch(e){}
   if(!GEO.length) GEO=JSON.parse(JSON.stringify(defGEO));
+  // One-time migration: apply updated pts and demonicNames from DD to any cached GEO
+  (function migrateGeo(){
+    const v=parseInt(localStorage.getItem('cct-migrate-v')||'0');
+    if(v>=MIGV)return;
+    const ddMap=new Map(DD.map(d=>[d.id,d]));
+    GEO.forEach(d=>{
+      const src=ddMap.get(d.id);
+      if(!src)return;
+      d.pts=JSON.parse(JSON.stringify(src.pts));
+      if(src.demonicName)d.demonicName=src.demonicName;
+    });
+    saveG();
+    localStorage.setItem('cct-migrate-v',String(MIGV));
+  })();
   rebuildDistMap();
   if(!HS.length)  HS=JSON.parse(JSON.stringify(defHS));
   defGEO.forEach(d=>{if(CS[d.id]===undefined)CS[d.id]=0;});
