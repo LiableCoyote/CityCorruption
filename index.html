@@ -141,6 +141,8 @@ body{background:#0a0602;font-family:'IM Fell English',serif;overflow:hidden;heig
 #edit-help b{color:rgba(200,168,76,0.68);font-style:normal;font-family:'Cinzel',serif;font-size:7.5px;letter-spacing:.8px;}
 #edit-acts{padding:5px 10px 7px;border-top:1px solid rgba(100,70,0,0.22);display:flex;gap:6px;flex-shrink:0;}
 .eab{flex:1;padding:5px 3px;border:1px solid;font-family:'Cinzel',serif;font-size:7.5px;letter-spacing:.8px;text-transform:uppercase;cursor:pointer;text-align:center;transition:all .2s;background:transparent;}
+#btn-imp{border-color:rgba(0,80,100,0.32);color:rgba(76,168,200,0.42);}
+#btn-imp:hover{border-color:#4ca8c8;color:#4ca8c8;}
 #btn-exp{border-color:rgba(100,80,0,0.32);color:rgba(200,168,76,0.42);}
 #btn-exp:hover{border-color:var(--gold);color:var(--gold);}
 #btn-rg{border-color:rgba(100,0,0,0.32);color:rgba(200,80,80,0.42);}
@@ -303,6 +305,16 @@ body.player-view .district-zone{pointer-events:none;}
 #mrumor{font-style:italic;font-size:9.5px;color:rgba(200,168,76,0.5);text-align:center;min-height:14px;padding:2px 8px;cursor:pointer;transition:color .2s;}
 #mrumor:hover{color:rgba(200,168,76,0.75);}
 #mrumor:active{color:rgba(200,168,76,0.75);}
+
+/* KEYBOARD HELP OVERLAY */
+#kb-help{display:none;position:fixed;top:0;left:0;right:0;bottom:0;z-index:80;background:rgba(5,2,0,0.8);align-items:center;justify-content:center;}
+#kb-help.open{display:flex;}
+#kb-help-box{background:rgba(18,12,5,0.97);border:1px solid var(--gold);padding:20px 28px;max-width:320px;width:90%;}
+#kb-help-box h3{font-family:'Cinzel',serif;color:var(--gold);font-size:11px;letter-spacing:1px;text-transform:uppercase;margin:0 0 12px 0;}
+.kb-row{display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid rgba(138,111,48,0.1);}
+.kb-key{font-family:monospace;font-size:10px;color:var(--gold);background:rgba(80,40,0,0.25);padding:1px 6px;border-radius:2px;border:1px solid rgba(138,111,48,0.25);}
+.kb-desc{font-size:9.5px;color:var(--parch);}
+#kb-help-close{font-size:8px;color:rgba(200,168,76,0.4);text-align:center;margin-top:12px;}
 /* DISTRICT SEARCH */
 #dist-search{width:100%;background:rgba(20,10,0,0.6);border:1px solid rgba(138,111,48,0.25);color:var(--parch);font-family:'IM Fell English',serif;font-size:10px;padding:5px 8px;box-sizing:border-box;outline:none;margin-bottom:0;}
 #dist-search:focus{border-color:var(--gold);}
@@ -400,7 +412,7 @@ body.player-view .district-zone{pointer-events:none;}
   #toast{bottom:calc(64px + env(safe-area-inset-bottom));}
   #modal{width:95vw;}
   .stab{min-height:44px;font-size:9px;padding:8px 4px;}
-  #undo-btn,#new-sess-btn,#redo-btn,#sess-sum-btn,#tl-btn{min-height:44px;padding:8px 6px;}
+  #undo-btn,#new-sess-btn,#redo-btn,#sess-sum-btn,#tl-btn,#undo-sess-btn{min-height:44px;padding:8px 6px;}
   .dmb,.eab,.fab{min-height:44px;padding:9px 4px;}
   .rel-adj{width:32px;height:32px;font-size:15px;}
   .mact{min-height:44px;font-size:11px;}
@@ -444,6 +456,7 @@ body.player-view .district-zone{pointer-events:none;}
 .mob-btn:active:not(.active){color:var(--gold);background:rgba(180,100,0,0.2);}
 .dtag:active{background:rgba(100,0,0,0.18);border-color:var(--crimson);color:#cc8888;}
 .utag:active{background:rgba(100,70,0,0.18);border-color:var(--dk-gold);color:var(--parch);}
+#btn-imp:active{border-color:#4ca8c8;color:#4ca8c8;}
 #btn-exp:active{border-color:var(--gold);color:var(--gold);}
 #btn-rg:active{border-color:var(--crimson);color:#cc4444;}
 #btn-ad:active{border-color:#44cc44;color:#88ee88;}
@@ -457,6 +470,18 @@ body.player-view .district-zone{pointer-events:none;}
 #rc-btn:active{border-color:var(--crimson);color:#cc4444;background:rgba(60,0,0,0.14);}
 #rr-btn:active{border-color:var(--dk-gold);color:var(--gold);background:rgba(60,40,0,0.14);}
 #sd-btn:active{border-color:#44cc44;color:#88ee88;background:rgba(0,40,0,0.14);}
+
+/* PRINT LAYOUT */
+@media print{
+  body{background:#fff !important;}
+  #side-panel,#panel-toggle,#mobile-bar,#mode-toggle,#map-reset,#pin-toggle,#player-toggle,#theme-picker,#toast,#timeline-bar,#kb-help{display:none !important;}
+  #map-wrapper{position:static !important;width:100% !important;height:auto !important;background:#fff !important;}
+  #map-svg{width:100% !important;height:auto !important;}
+  .district-zone{stroke:rgba(0,0,0,0.4) !important;stroke-width:1.5 !important;}
+  .dlabel{fill:#222 !important;stroke:#fff !important;stroke-width:2 !important;font-size:8px !important;}
+  .map-pin circle{fill:#333 !important;}
+  .pin-label{fill:#222 !important;}
+}
 </style>
 </head>
 <body>
@@ -502,7 +527,7 @@ body.player-view .district-zone{pointer-events:none;}
         <div id="undo-bar">
           <button id="undo-btn" disabled onclick="undoLast()">↩ Undo</button><button id="redo-btn" disabled onclick="redoLast()">↪ Redo</button>
           <span id="undo-cnt"></span>
-          <button id="sess-sum-btn" onclick="copySessionSummary()" title="Copy session recap to clipboard">📋 Recap</button><button id="new-sess-btn" onclick="newSession()">⚑ New Session</button>
+          <button id="undo-sess-btn" onclick="undoSession()" title="Undo all changes this session" style="background:transparent;border:1px solid rgba(180,60,60,0.28);color:rgba(200,100,100,0.45);font-family:'Cinzel',serif;font-size:8px;letter-spacing:.5px;text-transform:uppercase;cursor:pointer;padding:3px 6px;">↩ Session</button><button id="sess-sum-btn" onclick="copySessionSummary()" title="Copy session recap to clipboard">📋 Recap</button><button id="new-sess-btn" onclick="newSession()">⚑ New Session</button>
           <button id="tl-btn" onclick="openTimeline()" title="Replay history step by step" style="background:transparent;border:1px solid rgba(138,111,48,0.28);color:rgba(200,168,76,0.45);font-family:'Cinzel',serif;font-size:8px;letter-spacing:.5px;text-transform:uppercase;cursor:pointer;padding:3px 6px;">⏮ Replay</button>
         </div>
         <div id="change-log"></div>
@@ -538,7 +563,7 @@ body.player-view .district-zone{pointer-events:none;}
     <div id="edit-acts">
       <button class="eab" id="btn-ad" onclick="addDistrict()">+ Add</button>
       <button class="eab" id="btn-dd" onclick="deleteDistrict()">× Delete</button>
-      <button class="eab" id="btn-exp" onclick="showExport()">⇲ Export</button>
+      <button class="eab" id="btn-imp" onclick="importFromFile()">⇱ Import</button><button class="eab" id="btn-exp" onclick="showExport()">⇲ Export</button>
       <button class="eab" id="btn-rg" onclick="resetGeo()">↺ Reset</button>
     </div>
   </div>
@@ -600,6 +625,16 @@ body.player-view .district-zone{pointer-events:none;}
     </div>
   </div>
 </div>
+<div id="kb-help" onclick="this.classList.remove('open')">
+  <div id="kb-help-box" onclick="event.stopPropagation()">
+    <h3>Keyboard Shortcuts</h3>
+    <div class="kb-row"><span class="kb-key">Ctrl+Z</span><span class="kb-desc">Undo last change</span></div>
+    <div class="kb-row"><span class="kb-key">Ctrl+Shift+Z</span><span class="kb-desc">Redo last undo</span></div>
+    <div class="kb-row"><span class="kb-key">Esc</span><span class="kb-desc">Close modal / overlay</span></div>
+    <div class="kb-row"><span class="kb-key">?</span><span class="kb-desc">Toggle this help</span></div>
+    <div id="kb-help-close">Click anywhere to close</div>
+  </div>
+</div>
 <div id="toast"></div>
 <div id="timeline-bar"><span id="tl-label">History</span><input type="range" id="tl-slider" min="0" max="0" value="0" oninput="timelineSeek(this.value)"><span id="tl-info">Current</span><button id="tl-close" onclick="closeTimeline()">✕ Exit</button></div>
 
@@ -609,7 +644,7 @@ const DESCS=['Untouched by shadow','Whispers in dark corners','Corruption spread
 const COLORS=['#6baed6','#74c476','#fd8d3c','#9e9ac8','#fc8d59','#78c679','#e6550d','#3182bd'];
 const MAX_HIST=30;
 const CK='cct-corrupt-v1',GK='cct-geo-v1',HK='cct-houses-v1',RK='cct-rel-v1',LK='cct-log-v1';
-const EQK='cct-eq-v1',SDK='cct-savedef-v1',NK='cct-notes-v1',SK='cct-session-v1',HRK='cct-hrel-v1';
+const EQK='cct-eq-v1',SDK='cct-savedef-v1',NK='cct-notes-v1',SK='cct-session-v1',HRK='cct-hrel-v1',EVK='cct-events-v1',PNK='cct-pins-v1';
 const EQ_DEFAULT='oldR - delta';
 const DEFAULT_RUMORS=[
   ['All is quiet.','The streets are calm, merchants trade freely.'],
@@ -652,6 +687,8 @@ const DH=[
 let CS={},REL={},GEO=[],HS=[],LOG=[],EQ=EQ_DEFAULT,NOTES={},SESS=0,REDO=[],HREL={},EVENTS={},PINS=[];
 let mode='dm',dmTab='districts',selEdit=null,selHouse=null,activeId=null,pendLv=null,bulkSel=new Set();
 let dragV=null,dragging=false;
+let DIST_MAP=new Map();
+function rebuildDistMap(){DIST_MAP=new Map(GEO.map(d=>[d.id,d]));}
 
 // ━━━━ STORAGE ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 function load(){
@@ -687,6 +724,7 @@ function load(){
   try{const s=localStorage.getItem(EVK);if(s)EVENTS=JSON.parse(s);}catch(e){}
   try{const s=localStorage.getItem(PNK);if(s)PINS=JSON.parse(s);}catch(e){}
   if(!GEO.length) GEO=JSON.parse(JSON.stringify(defGEO));
+  rebuildDistMap();
   if(!HS.length)  HS=JSON.parse(JSON.stringify(defHS));
   defGEO.forEach(d=>{if(CS[d.id]===undefined)CS[d.id]=0;});
   defHS.forEach(h=>{if(REL[h.id]===undefined)REL[h.id]=10;});
@@ -880,6 +918,7 @@ function renderDistTab(){
 }
 
 function filterDistricts(q){
+  if(bulkSel.size)bulkClear();
   q=q.toLowerCase().trim();
   document.querySelectorAll('.district-item').forEach(el=>{
     const name=el.querySelector('.d-name').textContent.toLowerCase();
@@ -911,13 +950,13 @@ function bulkApply(delta){
       const h=getHouse(id),oldR=h?(REL[h.id]||0):null;
       CS[id]=nv;
       let newR=null;
-      if(h){newR=evalEq(oldR,nv-cur,nv,cur);REL[h.id]=newR;saveR();}
-      const d=GEO.find(x=>x.id===id);
+      if(h){newR=evalEq(oldR,nv-cur,nv,cur);REL[h.id]=newR;}
+      const d=DIST_MAP.get(id);
       LOG.push({ts:Date.now(),distId:id,dn:d.name,oldC:cur,newC:nv,hid:h?h.id:null,hn:h?h.name:null,oldR,newR});
       count++;
     }
   });
-  if(count){REDO=[];saveC();saveL();renderSVG();renderDMPanel();toast((delta>0?'▲':'▼')+' '+count+' district'+(count>1?'s':'')+' updated');}
+  if(count){REDO=[];saveC();saveR();saveL();renderSVG();renderDMPanel();toast((delta>0?'▲':'▼')+' '+count+' district'+(count>1?'s':'')+' updated');}
   bulkClear();
 }
 function bulkSetLevel(){
@@ -931,13 +970,13 @@ function bulkSetLevel(){
       const h=getHouse(id),oldR=h?(REL[h.id]||0):null,delta=lv-cur;
       CS[id]=lv;
       let newR=null;
-      if(h){newR=evalEq(oldR,delta,lv,cur);REL[h.id]=newR;saveR();}
-      const d=GEO.find(x=>x.id===id);
+      if(h){newR=evalEq(oldR,delta,lv,cur);REL[h.id]=newR;}
+      const d=DIST_MAP.get(id);
       LOG.push({ts:Date.now(),distId:id,dn:d.name,oldC:cur,newC:lv,hid:h?h.id:null,hn:h?h.name:null,oldR,newR});
       count++;
     }
   });
-  if(count){REDO=[];saveC();saveL();renderSVG();renderDMPanel();toast('Set '+count+' district'+(count>1?'s':'')+' to Tier '+lv);}
+  if(count){REDO=[];saveC();saveR();saveL();renderSVG();renderDMPanel();toast('Set '+count+' district'+(count>1?'s':'')+' to Tier '+lv);}
   bulkClear();
 }
 function renderHousesTab(){
@@ -976,7 +1015,7 @@ function renderHousesTab(){
       bar.appendChild(s);
     }
     const dm=document.createElement('div');dm.className='h-dists';
-    dm.textContent=h.districts.map(id=>{const d=GEO.find(x=>x.id===id);return d?d.name:id;}).join(', ')||'(no districts)';
+    dm.textContent=h.districts.map(id=>{const d=DIST_MAP.get(id);return d?d.name:id;}).join(', ')||'(no districts)';
     item.appendChild(hdr);item.appendChild(bar);item.appendChild(dm);
     el.appendChild(item);
   });
@@ -1015,7 +1054,7 @@ function renderLogTab(){
 // ━━━━ CORRUPTION MODAL ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 function openModal(id){
   activeId=id;pendLv=CS[id]||0;
-  const d=GEO.find(x=>x.id===id),h=getHouse(id);
+  const d=DIST_MAP.get(id),h=getHouse(id);
   document.getElementById('mtitle').textContent=d.name;
   const mh=document.getElementById('mhouse');
   if(h){mh.style.display='block';mh.style.color=h.color;mh.textContent=h.name+' — Relations: '+(REL[h.id]||0)+'/10';}
@@ -1030,8 +1069,22 @@ function showRumor(distId,tier){
   // Check for custom event first
   const custom=EVENTS[distId]&&EVENTS[distId][tier];
   const pool=custom?[custom]:DEFAULT_RUMORS[tier]||['...'];
-  el.textContent='"'+pool[Math.floor(Math.random()*pool.length)]+'"';
-  el.title='Click to re-roll rumor (right-click to edit)';
+  el.innerHTML='';
+  const qt=document.createElement('span');qt.textContent='\u201c'+pool[Math.floor(Math.random()*pool.length)]+'\u201d';
+  const ed=document.createElement('span');ed.textContent=' \u270e';ed.style.cssText='cursor:pointer;opacity:0.4;font-size:8px;';
+  ed.title='Edit custom rumor for this tier';
+  ed.onclick=(ev)=>{
+    ev.stopPropagation();
+    const cur=EVENTS[distId]&&EVENTS[distId][tier]||'';
+    const val=prompt('Custom rumor for this district at Tier '+tier+':\n(Leave empty for defaults)',cur);
+    if(val===null)return;
+    if(!EVENTS[distId])EVENTS[distId]={};
+    if(val.trim())EVENTS[distId][tier]=val.trim();
+    else{delete EVENTS[distId][tier];if(!Object.keys(EVENTS[distId]).length)delete EVENTS[distId];}
+    saveEV();showRumor(distId,tier);
+  };
+  el.appendChild(qt);el.appendChild(ed);
+  el.title='Click to re-roll, ✎ to edit';
   el.onclick=()=>showRumor(distId,pendLv!==null?pendLv:tier);
   el.oncontextmenu=(e)=>{
     e.preventDefault();
@@ -1077,7 +1130,7 @@ function confirmLv(){
   CS[activeId]=pendLv;saveC();
   let newR=null;
   if(h){newR=evalEq(oldR,delta,pendLv,oldC);REL[h.id]=newR;saveR();}
-  const d=GEO.find(x=>x.id===activeId);
+  const d=DIST_MAP.get(activeId);
   const entry={ts:Date.now(),distId:activeId,dn:d.name,oldC,newC:pendLv,hid:h?h.id:null,hn:h?h.name:null,oldR,newR};
   LOG.push(entry);REDO=[];
   if(h&&oldR!==null&&newR!==null){
@@ -1118,6 +1171,24 @@ function redoLast(){
   toast('↪ Redone: '+e.dn+' Tier '+e.oldC+'→'+e.newC);
 }
 
+function undoSession(){
+  // Find session marker
+  let start=0;
+  for(let i=LOG.length-1;i>=0;i--){if(LOG[i].type==='session'){start=i+1;break;}}
+  const real=LOG.slice(start).filter(e=>!e.type);
+  if(!real.length){toast('No changes this session');return;}
+  if(!confirm('Undo all '+real.length+' change'+(real.length>1?'s':'')+' from this session?'))return;
+  // Undo in reverse order
+  for(let i=real.length-1;i>=0;i--){
+    const e=real[i];
+    CS[e.distId]=e.oldC;
+    if(e.hid)REL[e.hid]=e.oldR;
+  }
+  // Remove all entries after session marker
+  LOG.splice(start);
+  REDO=[];saveC();saveR();saveL();renderSVG();renderDMPanel();
+  toast('↩ Undone '+real.length+' change'+(real.length>1?'s':''));
+}
 function newSession(){
   SESS++;saveS();
   LOG.push({type:'session',ts:Date.now(),num:SESS});
@@ -1244,6 +1315,29 @@ function deleteDistrict(){
   HS.forEach(h=>{h.districts=h.districts.filter(x=>x!==selEdit);});
   saveG();saveH();selEdit=null;renderSVG();renderEditPanel();renderDMPanel();
   toast('District "'+d.name+'" deleted');
+}
+function importFromFile(){
+  const inp=document.createElement('input');inp.type='file';inp.accept='.json,application/json';
+  inp.onchange=()=>{
+    const f=inp.files[0];if(!f)return;
+    const r=new FileReader();
+    r.onload=()=>{
+      try{
+        const data=JSON.parse(r.result);
+        if(!Array.isArray(data)||!data.length||!data[0].pts){
+          alert('Invalid format. Expected an array of district objects with id, name, pts.');return;
+        }
+        if(!confirm('Import '+data.length+' districts? This will replace current boundaries.'))return;
+        GEO=data;rebuildDistMap();saveG();
+        // Reset corruption for new districts
+        data.forEach(d=>{if(CS[d.id]===undefined)CS[d.id]=0;});
+        saveC();renderSVG();renderEditPanel();renderDMPanel();
+        toast('Imported '+data.length+' districts');
+      }catch(e){alert('Error parsing JSON: '+e.message);}
+    };
+    r.readAsText(f);
+  };
+  inp.click();
 }
 function showExport(){document.getElementById('exp-code').textContent=JSON.stringify(GEO,null,2);document.getElementById('exp-ov').classList.add('open');}
 function copyExport(){const c=document.getElementById('exp-code').textContent;navigator.clipboard.writeText(c).then(()=>toast('Copied!')).catch(()=>{const t=document.createElement('textarea');t.value=c;document.body.appendChild(t);t.select();document.execCommand('copy');document.body.removeChild(t);toast('Copied!');});}
@@ -1372,7 +1466,8 @@ function resetRelations(){if(!confirm('Reset ALL house relations to 10?'))return
 document.getElementById('mod-ov').addEventListener('click',e=>{if(e.target===document.getElementById('mod-ov'))closeModal();});
 document.addEventListener('keydown',e=>{
   if(e.key==='Escape'){closeModal();closeExport();}
-  if((e.ctrlKey||e.metaKey)&&e.shiftKey&&e.key==='z'){e.preventDefault();redoLast();}else if((e.ctrlKey||e.metaKey)&&e.key==='z'){e.preventDefault();undoLast();}
+  if(e.key==='?'&&!e.ctrlKey&&!e.metaKey&&document.activeElement.tagName!=='INPUT'&&document.activeElement.tagName!=='TEXTAREA'){document.getElementById('kb-help').classList.toggle('open');return;}
+    if((e.ctrlKey||e.metaKey)&&e.shiftKey&&e.key==='z'){e.preventDefault();redoLast();}else if((e.ctrlKey||e.metaKey)&&e.key==='z'){e.preventDefault();undoLast();}
 });
 
 // ━━━━ PANEL TOGGLE ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -1443,7 +1538,6 @@ function timelineSeek(val){
   const real=LOG.filter(e=>!e.type);
   const n=parseInt(val);
   // Reconstruct state up to step n
-  // Start from defaults: all corruption 0, all relations 10
   const tCS={},tREL={};
   GEO.forEach(d=>tCS[d.id]=0);HS.forEach(h=>tREL[h.id]=10);
   for(let i=0;i<n&&i<real.length;i++){
@@ -1451,14 +1545,11 @@ function timelineSeek(val){
     tCS[e.distId]=e.newC;
     if(e.hid)tREL[e.hid]=e.newR;
   }
-  // Temporarily apply reconstructed state for rendering
-  const savedCS=CS,savedREL=REL;
+  // Swap in temp state for rendering, then restore snapshots
+  const liveCS=CS,liveREL=REL;
   CS=tCS;REL=tREL;
   renderSVG();renderDMPanel();
-  CS=savedCS;REL=savedREL;
-  // Overwrite live state with reconstructed (will restore on close)
-  for(const k in tCS)CS[k]=tCS[k];
-  for(const k in tREL)REL[k]=tREL[k];
+  CS=liveCS;REL=liveREL;
   const info=document.getElementById('tl-info');
   if(n===0)info.textContent='Before any changes';
   else if(n>=real.length)info.textContent='Current ('+real.length+' changes)';
