@@ -295,6 +295,12 @@ body.player-view #panel-toggle{display:none;}
 body.player-view #mobile-bar{display:none !important;}
 body.player-view #map-reset{bottom:12px;}
 body.player-view #toast{bottom:20px;}
+#bgimg-btn{position:absolute;bottom:12px;right:220px;z-index:10;padding:5px 10px;background:rgba(10,5,0,.92);border:1px solid var(--dk-gold);color:var(--gold);font-family:'Cinzel',serif;font-size:8px;letter-spacing:1px;text-transform:uppercase;cursor:pointer;transition:all .2s;}
+#bgimg-btn:hover{background:rgba(180,100,0,.18);border-color:var(--gold);}
+#bgimg-btn:active{background:rgba(180,100,0,.18);border-color:var(--gold);}
+#png-btn{position:absolute;bottom:12px;right:120px;z-index:10;padding:5px 10px;background:rgba(10,5,0,.92);border:1px solid var(--dk-gold);color:var(--gold);font-family:'Cinzel',serif;font-size:8px;letter-spacing:1px;text-transform:uppercase;cursor:pointer;transition:all .2s;}
+#png-btn:hover{background:rgba(180,100,0,.18);border-color:var(--gold);}
+#png-btn:active{background:rgba(180,100,0,.18);border-color:var(--gold);}
 #player-toggle{position:absolute;bottom:12px;right:12px;z-index:10;padding:5px 10px;background:rgba(10,5,0,.92);border:1px solid var(--dk-gold);color:var(--gold);font-family:'Cinzel',serif;font-size:8px;letter-spacing:1px;text-transform:uppercase;cursor:pointer;transition:all .2s;}
 #player-toggle:hover{background:rgba(180,100,0,.18);border-color:var(--gold);}
 #player-toggle:active{background:rgba(180,100,0,.18);border-color:var(--gold);}
@@ -315,10 +321,32 @@ body.player-view .district-zone{pointer-events:none;}
 .kb-key{font-family:monospace;font-size:10px;color:var(--gold);background:rgba(80,40,0,0.25);padding:1px 6px;border-radius:2px;border:1px solid rgba(138,111,48,0.25);}
 .kb-desc{font-size:9.5px;color:var(--parch);}
 #kb-help-close{font-size:8px;color:rgba(200,168,76,0.4);text-align:center;margin-top:12px;}
+
+
+/* MODAL HISTORY */
+#mhist-row{margin-top:6px;padding-top:6px;border-top:1px solid rgba(138,111,48,0.18);}
+#mhist-hdr{font-family:'Cinzel',serif;font-size:8px;color:rgba(200,168,76,0.4);letter-spacing:.5px;text-transform:uppercase;cursor:pointer;display:flex;align-items:center;justify-content:space-between;padding:2px 0;}
+#mhist-hdr:hover{color:rgba(200,168,76,0.7);}
+#mhist-list{display:none;margin-top:4px;}
+#mhist-list.open{display:block;}
+.mhist-entry{font-size:8.5px;color:var(--parch);padding:2px 0;border-bottom:1px solid rgba(138,111,48,0.08);display:flex;justify-content:space-between;gap:6px;}
+.mhist-entry:last-child{border-bottom:none;}
+.mhist-change{color:var(--parch);}
+.mhist-change.up{color:#cc5555;}
+.mhist-change.dn{color:#88cc66;}
+.mhist-ts{color:rgba(200,168,76,0.3);font-size:7.5px;flex-shrink:0;}
+.mhist-empty{font-size:8.5px;color:rgba(200,168,76,0.25);font-style:italic;}
+/* HOUSE CORRUPTION STATS */
+.h-corrupt-stat{padding:3px 6px 5px;display:flex;align-items:center;gap:8px;}
+.h-cs-bar{flex:1;height:4px;background:rgba(50,40,30,0.45);border-radius:2px;overflow:hidden;}
+.h-cs-fill{height:100%;border-radius:2px;transition:width .3s;}
+.h-cs-label{font-size:8.5px;white-space:nowrap;flex-shrink:0;}
+.h-cs-danger{font-size:8px;font-family:'Cinzel',serif;letter-spacing:.3px;flex-shrink:0;}
 /* DISTRICT SEARCH */
-#dist-search{width:100%;background:rgba(20,10,0,0.6);border:1px solid rgba(138,111,48,0.25);color:var(--parch);font-family:'IM Fell English',serif;font-size:10px;padding:5px 8px;box-sizing:border-box;outline:none;margin-bottom:0;}
-#dist-search:focus{border-color:var(--gold);}
-#dist-search::placeholder{color:rgba(200,168,76,0.25);font-style:italic;}
+#dist-search,#log-search{width:100%;background:rgba(20,10,0,0.6);border:1px solid rgba(138,111,48,0.25);color:var(--parch);font-family:'IM Fell English',serif;font-size:10px;padding:5px 8px;box-sizing:border-box;outline:none;margin-bottom:0;}
+#log-search{border-bottom:none;}
+#dist-search:focus,#log-search:focus{border-color:var(--gold);}
+#dist-search::placeholder,#log-search::placeholder{color:rgba(200,168,76,0.25);font-style:italic;}
 /* CORRUPTION MODAL */
 #mod-ov{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.72);z-index:100;align-items:center;justify-content:center;backdrop-filter:blur(2px);}
 #mod-ov.open{display:flex;}
@@ -409,6 +437,8 @@ body.player-view .district-zone{pointer-events:none;}
   #pin-toggle{bottom:calc(64px + env(safe-area-inset-bottom));left:90px;}
   #theme-picker{top:8px;right:8px;}
   #player-toggle{bottom:calc(64px + env(safe-area-inset-bottom));right:8px;font-size:7px;padding:4px 6px;}
+  #png-btn{bottom:calc(64px + env(safe-area-inset-bottom));right:90px;font-size:7px;padding:4px 6px;}
+  #bgimg-btn{display:none;}
   #toast{bottom:calc(64px + env(safe-area-inset-bottom));}
   #modal{width:95vw;}
   .stab{min-height:44px;font-size:9px;padding:8px 4px;}
@@ -500,6 +530,8 @@ body.player-view .district-zone{pointer-events:none;}
   <div class="theme-dot" style="background:#cc4444" onclick="setTheme('blood')" title="Blood"></div>
 </div>
 <button id="pin-toggle" onclick="togglePinMode()" title="Toggle pin placement mode">📌 Pins</button>
+<button id="bgimg-btn" onclick="uploadBGImage()" title="Upload a background map image">🗺 BG Image</button>
+<button id="png-btn" onclick="exportPNG()" title="Save map as PNG image">🖼 Save PNG</button>
 <button id="player-toggle" onclick="togglePlayerView()" title="Toggle player-safe view">👁 Player View</button>
 <button id="panel-toggle" onclick="togglePanel()" title="Toggle panel">◀</button>
 <div id="side-panel">
@@ -524,6 +556,7 @@ body.player-view .district-zone{pointer-events:none;}
     <div id="tab-houses" class="dm-tab"><div id="house-list"></div></div>
     <div id="tab-log" class="dm-tab">
       <div id="log-inner">
+        <input id="log-search" type="text" placeholder="Filter log…" oninput="filterLog(this.value)">
         <div id="undo-bar">
           <button id="undo-btn" disabled onclick="undoLast()">↩ Undo</button><button id="redo-btn" disabled onclick="redoLast()">↪ Redo</button>
           <span id="undo-cnt"></span>
@@ -606,6 +639,7 @@ body.player-view .district-zone{pointer-events:none;}
       <label id="mnotes-lbl" for="mnotes-ta">DM Notes</label>
       <textarea id="mnotes-ta" rows="3" placeholder="Notes about this district…"></textarea>
     </div>
+    <div id="mhist-row"><div id="mhist-hdr" onclick="toggleModalHist()">History <span id="mhist-arrow">▸</span></div><div id="mhist-list"></div></div>
     <div id="macts">
       <button class="mact" id="mc" onclick="closeModal()">Cancel</button>
       <button class="mact" id="mok" onclick="confirmLv()">Apply</button>
@@ -645,7 +679,8 @@ const COLORS=['#6baed6','#74c476','#fd8d3c','#9e9ac8','#fc8d59','#78c679','#e655
 const MAX_HIST=30;
 const CK='cct-corrupt-v1',GK='cct-geo-v1',HK='cct-houses-v1',RK='cct-rel-v1',LK='cct-log-v1';
 const EQK='cct-eq-v1',SDK='cct-savedef-v1',NK='cct-notes-v1',SK='cct-session-v1',HRK='cct-hrel-v1',EVK='cct-events-v1',PNK='cct-pins-v1';
-const MIGV=1; // bump when DD boundaries/demonic names change
+const MIGV=1;
+const BGIK='cct-bgimg-v1'; // bump when DD boundaries/demonic names change
 const EQ_DEFAULT='oldR - delta';
 const DEFAULT_RUMORS=[
   ['All is quiet.','The streets are calm, merchants trade freely.'],
@@ -688,7 +723,7 @@ const DH=[
 let CS={},REL={},GEO=[],HS=[],LOG=[],EQ=EQ_DEFAULT,NOTES={},SESS=0,REDO=[],HREL={},EVENTS={},PINS=[];
 let mode='dm',dmTab='districts',selEdit=null,selHouse=null,activeId=null,pendLv=null,bulkSel=new Set();
 let dragV=null,dragging=false;
-let DIST_MAP=new Map();
+let DIST_MAP=new Map(),BGIMG=null;
 function rebuildDistMap(){DIST_MAP=new Map(GEO.map(d=>[d.id,d]));}
 
 // ━━━━ STORAGE ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -724,6 +759,7 @@ function load(){
   try{const s=localStorage.getItem(HRK);if(s)HREL=JSON.parse(s);}catch(e){}
   try{const s=localStorage.getItem(EVK);if(s)EVENTS=JSON.parse(s);}catch(e){}
   try{const s=localStorage.getItem(PNK);if(s)PINS=JSON.parse(s);}catch(e){}
+  try{BGIMG=localStorage.getItem(BGIK)||null;}catch(e){}
   if(!GEO.length) GEO=JSON.parse(JSON.stringify(defGEO));
   // One-time migration: apply updated pts and demonicNames from DD to any cached GEO
   (function migrateGeo(){
@@ -793,6 +829,7 @@ function setDmTab(t){
 function renderSVG(){
   const svg=document.getElementById('map-svg');
   svg.innerHTML='';
+  renderBGImage(svg);
   if(mode==='dm')renderDMSVG(svg);
   else if(mode==='edit')renderEditSVG(svg);
   else renderFactionSVG(svg);
@@ -910,7 +947,7 @@ function renderFactionSVG(svg){
 function renderDMPanel(){
   renderDistTab();
   if(dmTab==='houses')renderHousesTab();
-  if(dmTab==='log')renderLogTab();
+  if(dmTab==='log'){renderLogTab();const ls=document.getElementById('log-search');if(ls)ls.value='';}
 }
 
 function renderDistTab(){
@@ -926,12 +963,18 @@ function renderDistTab(){
     const pp=document.createElement('div');pp.className='d-pips';
     for(let i=1;i<=5;i++){const p=document.createElement('div');p.className='pip'+(i<=lv?(lv===5?' on max':' on'):'');pp.appendChild(p);}
     row.appendChild(dot);row.appendChild(nm);
-    if(NOTES[d.id]){const ni=document.createElement('span');ni.className='d-note-ind';ni.title='Has DM notes';ni.textContent='✎';row.appendChild(ni);}
+    if(NOTES[d.id]){const ni=document.createElement('span');ni.className='d-note-ind';ni.title=NOTES[d.id].slice(0,120)+(NOTES[d.id].length>120?'…':'');ni.textContent='✎';row.appendChild(ni);}
     row.appendChild(pp);
     el.appendChild(row);
   });
 }
 
+function filterLog(q){
+  q=q.toLowerCase().trim();
+  document.querySelectorAll('#change-log .log-entry,#change-log .log-threshold').forEach(el=>{
+    el.style.display=(!q||el.textContent.toLowerCase().includes(q))?'':'none';
+  });
+}
 function filterDistricts(q){
   if(bulkSel.size)bulkClear();
   q=q.toLowerCase().trim();
@@ -1031,7 +1074,27 @@ function renderHousesTab(){
     }
     const dm=document.createElement('div');dm.className='h-dists';
     dm.textContent=h.districts.map(id=>{const d=DIST_MAP.get(id);return d?d.name:id;}).join(', ')||'(no districts)';
-    item.appendChild(hdr);item.appendChild(bar);item.appendChild(dm);
+    // Corruption stats
+    const tiers=h.districts.map(id=>CS[id]||0);
+    const avg=tiers.length?tiers.reduce((a,b)=>a+b,0)/tiers.length:0;
+    const danger=tiers.filter(t=>t>=3).length;
+    const statRow=document.createElement('div');statRow.className='h-corrupt-stat';
+    const csBar=document.createElement('div');csBar.className='h-cs-bar';
+    const csFill=document.createElement('div');csFill.className='h-cs-fill';
+    const pct=(avg/5*100).toFixed(0)+'%';
+    const col=avg<2?'#88cc66':avg<3.5?'#cc9944':'#cc5555';
+    csFill.style.width=pct;csFill.style.background=col;
+    csBar.appendChild(csFill);
+    const csLabel=document.createElement('span');csLabel.className='h-cs-label';
+    csLabel.style.color=col;
+    csLabel.textContent='Avg '+avg.toFixed(1);
+    csLabel.title='Average corruption tier across owned districts';
+    const csDanger=document.createElement('span');csDanger.className='h-cs-danger';
+    csDanger.style.color=danger?'#cc5555':'rgba(200,168,76,0.3)';
+    csDanger.textContent=danger?danger+' at III+':'';
+    csDanger.title=danger+' district'+(danger!==1?'s':'')+' at Tier 3 or higher';
+    statRow.appendChild(csBar);statRow.appendChild(csLabel);statRow.appendChild(csDanger);
+    item.appendChild(hdr);item.appendChild(bar);item.appendChild(statRow);item.appendChild(dm);
     el.appendChild(item);
   });
 }
@@ -1048,7 +1111,7 @@ function renderLogTab(){
   [...LOG].reverse().forEach(e=>{
     if(e.type==='session'){
       const row=document.createElement('div');row.className='log-session';
-      row.textContent='── Session '+e.num+' ──';
+      row.textContent='── '+(e.name||'Session '+e.num)+' ──';
       log.appendChild(row);return;
     }
     if(e.type==='threshold'){
@@ -1077,7 +1140,30 @@ function openModal(id){
   updateCBtns(pendLv);
   document.getElementById('mnotes-ta').value=NOTES[id]||'';
   showRumor(id,CS[id]||0);
+  renderModalHist(id);
   document.getElementById('mod-ov').classList.add('open');
+}
+function toggleModalHist(){
+  const list=document.getElementById('mhist-list');
+  const arrow=document.getElementById('mhist-arrow');
+  const open=list.classList.toggle('open');
+  arrow.textContent=open?'▾':'▸';
+}
+function renderModalHist(distId){
+  const list=document.getElementById('mhist-list');list.innerHTML='';
+  list.classList.remove('open');
+  document.getElementById('mhist-arrow').textContent='▸';
+  const entries=LOG.filter(e=>!e.type&&e.distId===distId).slice(-5).reverse();
+  if(!entries.length){
+    const emp=document.createElement('div');emp.className='mhist-empty';emp.textContent='No changes recorded';list.appendChild(emp);return;
+  }
+  entries.forEach(e=>{
+    const row=document.createElement('div');row.className='mhist-entry';
+    const ch=document.createElement('span');ch.className='mhist-change '+(e.newC>e.oldC?'up':'dn');
+    ch.textContent=(e.newC>e.oldC?'▲':'▼')+' Tier '+e.oldC+' → '+e.newC+(e.hid?' ('+e.hn+': '+e.oldR+'→'+e.newR+')':'');
+    const ts=document.createElement('span');ts.className='mhist-ts';ts.textContent=fmtTime(e.ts);
+    row.appendChild(ch);row.appendChild(ts);list.appendChild(row);
+  });
 }
 function showRumor(distId,tier){
   const el=document.getElementById('mrumor');
@@ -1206,10 +1292,13 @@ function undoSession(){
 }
 function newSession(){
   SESS++;saveS();
-  LOG.push({type:'session',ts:Date.now(),num:SESS});
+  const name=prompt('Session name (optional):','Session '+SESS);
+  if(name===null){SESS--;saveS();return;}
+  const sname=name.trim()||'Session '+SESS;
+  LOG.push({type:'session',ts:Date.now(),num:SESS,name:sname});
   while(LOG.length>MAX_HIST)LOG.shift();saveL();
   renderLogTab();
-  toast('Session '+SESS+' started');
+  toast(sname+' started');
 }
 
 function copySessionSummary(){
@@ -1218,7 +1307,10 @@ function copySessionSummary(){
   for(let i=LOG.length-1;i>=0;i--){if(LOG[i].type==='session'){start=i+1;break;}}
   const entries=LOG.slice(start);
   if(!entries.length){toast('No changes this session');return;}
-  const lines=['═══ Session '+(SESS||1)+' Recap ═══',''];
+  // Find the current session entry for name
+  const sessEntry=[...LOG].reverse().find(e=>e.type==='session');
+  const sessName=sessEntry?.name||'Session '+(SESS||1);
+  const lines=['═══ '+sessName+' Recap ═══',''];
   const changes=entries.filter(e=>!e.type);
   const thresholds=entries.filter(e=>e.type==='threshold');
   if(changes.length){
@@ -1537,6 +1629,7 @@ function openTimeline(){
   const slider=document.getElementById('tl-slider');
   slider.max=real.length;slider.value=real.length;
   document.getElementById('timeline-bar').classList.add('visible');
+  if(isMobile()){const mb=document.getElementById('mobile-bar');if(mb)mb.style.bottom='42px';}
   document.getElementById('tl-info').textContent='Current ('+real.length+' changes)';
   toast('⏮ Timeline open — drag slider to replay');
 }
@@ -1545,6 +1638,7 @@ function closeTimeline(){
   CS=JSON.parse(JSON.stringify(tlSnapCS));REL=JSON.parse(JSON.stringify(tlSnapREL));
   tlActive=false;
   document.getElementById('timeline-bar').classList.remove('visible');
+  const mb=document.getElementById('mobile-bar');if(mb)mb.style.bottom='';
   renderSVG();renderDMPanel();
   toast('Timeline closed — state restored');
 }
@@ -1611,6 +1705,71 @@ function renderPins(svg){
     });
     svg.appendChild(g);
   });
+}
+
+// ━━━━ BACKGROUND IMAGE ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+function uploadBGImage(){
+  const menu=confirm('Upload an image to use as the map background?\n\nOK = Choose file   Cancel = Clear background');
+  if(!menu){
+    BGIMG=null;localStorage.removeItem(BGIK);renderSVG();toast('Background cleared');return;
+  }
+  const inp=document.createElement('input');inp.type='file';inp.accept='image/*';
+  inp.onchange=()=>{
+    const f=inp.files[0];if(!f)return;
+    if(f.size>5*1024*1024){toast('Image too large — max 5 MB');return;}
+    const r=new FileReader();
+    r.onload=()=>{
+      BGIMG=r.result;
+      try{localStorage.setItem(BGIK,BGIMG);}catch(e){toast('Image stored in memory only (too large for localStorage)');}
+      renderSVG();toast('🗺 Background image set');
+    };
+    r.readAsDataURL(f);
+  };
+  inp.click();
+}
+function renderBGImage(svg){
+  if(!BGIMG)return;
+  const vb=svg.getAttribute('viewBox').split(' ').map(Number);
+  const img=document.createElementNS('http://www.w3.org/2000/svg','image');
+  img.setAttribute('x',vb[0]);img.setAttribute('y',vb[1]);
+  img.setAttribute('width',vb[2]);img.setAttribute('height',vb[3]);
+  img.setAttribute('preserveAspectRatio','xMidYMid slice');
+  img.setAttribute('href',BGIMG);
+  img.setAttribute('opacity','0.45');
+  svg.insertBefore(img,svg.firstChild);
+}
+
+// ━━━━ PNG EXPORT ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+function exportPNG(){
+  const svg=document.getElementById('map-svg');
+  const bbox=svg.getBoundingClientRect();
+  const w=Math.round(bbox.width),h=Math.round(bbox.height);
+  // Serialize current SVG
+  const serial=new XMLSerializer();
+  let svgStr=serial.serializeToString(svg);
+  // Embed fonts as data URL is not feasible; use fill colors directly
+  const blob=new Blob([svgStr],{type:'image/svg+xml'});
+  const url=URL.createObjectURL(blob);
+  const img=new Image();
+  img.onload=()=>{
+    const canvas=document.createElement('canvas');
+    canvas.width=w*2;canvas.height=h*2; // 2x for retina
+    const ctx=canvas.getContext('2d');
+    // Dark background matching the app
+    ctx.fillStyle='#0a0500';ctx.fillRect(0,0,canvas.width,canvas.height);
+    ctx.drawImage(img,0,0,canvas.width,canvas.height);
+    URL.revokeObjectURL(url);
+    canvas.toBlob(pngBlob=>{
+      const a=document.createElement('a');
+      a.href=URL.createObjectURL(pngBlob);
+      const d=new Date();
+      a.download='city_map_'+d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')+'.png';
+      a.click();URL.revokeObjectURL(a.href);
+      toast('🖼 PNG saved');
+    },'image/png');
+  };
+  img.onerror=()=>{URL.revokeObjectURL(url);toast('PNG export failed — try zoom reset first');};
+  img.src=url;
 }
 
 // ━━━━ PLAYER VIEW ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
